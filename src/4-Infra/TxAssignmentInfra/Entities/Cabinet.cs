@@ -1,4 +1,4 @@
-﻿namespace TxAssignmentInfra.Entities
+﻿ namespace TxAssignmentInfra.Entities
 {
     public class Cabinet : BaseEntity
     {

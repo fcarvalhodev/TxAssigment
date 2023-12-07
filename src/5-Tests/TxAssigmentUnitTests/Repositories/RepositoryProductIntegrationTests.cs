@@ -1,6 +1,7 @@
 ﻿using StackExchange.Redis;
 using TxAssignmentInfra.Connectors;
 using TxAssignmentInfra.Entities;
+using TxAssignmentInfra.Entities.Enumerators;
 using TxAssignmentInfra.Repositories;
 
 
@@ -15,7 +16,6 @@ namespace TxAssigmentUnitTests.Repositories
         [TestInitialize]
         public void Setup()
         {
-            // Replace these with your Redis configuration
             _database = RedisConnectorHelper.Connection.GetDatabase();
             _repository = new RepositoryProduct(_database);
         }
@@ -27,8 +27,15 @@ namespace TxAssigmentUnitTests.Repositories
             var product = new Product
             {
                 Id = Guid.NewGuid(),
-                Quantity = 1,
-                JanCode  = "SOMEC02038743248327"
+                JanCode = $"{Guid.NewGuid()}",
+                Depth = 0.308,
+                Height = 0.097,
+                Width = 0.097,
+                Size = 1500,
+                ImageUrl = "https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg",
+                Name = "Coca -Cola 1500ml",
+                Shape = EnumProductShape.Bottle,
+                TimeStamp = 1659397548
             };
 
             // Act

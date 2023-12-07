@@ -53,7 +53,7 @@ namespace TxAssignmentInfra.Repositories
         {
             try
             {
-                var key = $"product:{IdProduct}";
+                var key = IdProduct.ToString();
                 if (!await _database.KeyExistsAsync(key))
                 {
                     return new RepositoryResponse { Success = false, Message = "Product not found." };

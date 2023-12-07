@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using TxAssignmentInfra.Entities;
+using TxAssignmentInfra.Entities.Enumerators;
 using TxAssignmentInfra.Repositories;
 
 namespace TxAssigmentUnitTests.Repositories
@@ -23,8 +24,15 @@ namespace TxAssigmentUnitTests.Repositories
             _testProduct = new Product
             {
                 Id = Guid.NewGuid(),
-                JanCode = "",
-                Quantity = 1
+                JanCode = $"{Guid.NewGuid()}",
+                Depth = 0.308,
+                Height = 0.097,
+                Width = 0.097,
+                Size = 1500,
+                ImageUrl = "https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg",
+                Name = "Coca -Cola 1500ml",
+                Shape = EnumProductShape.Bottle,
+                TimeStamp = 1659397548
             };
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TxAssignmentInfra.Repositories
 {
-    internal class RepositoryCabinet
+    public class RepositoryCabinet
     {
     }
 }
