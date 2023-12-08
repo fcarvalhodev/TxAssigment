@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using TxAssigmentUnitTests.Mocks;
 using TxAssignmentInfra.Entities;
 using TxAssignmentInfra.Repositories;
 using TxAssignmentServices.Models;
+using TxAssignmentServices.Profiles;
 using TxAssignmentServices.Services;
 
 namespace TxAssigmentUnitTests.Services
@@ -15,6 +18,19 @@ namespace TxAssigmentUnitTests.Services
         private Mock<IMapper> _mockMapper;
         private Mock<ILogger<ServiceCabinet>> _mockLogger;
         private ServiceCabinet _service;
+
+        private readonly IConfigurationProvider _configuration;
+        private readonly IMapper _mapper;
+
+        public ServiceCabinetTests()
+        {
+            _configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<ProfileCabinet>();
+            });
+
+            _mapper = _configuration.CreateMapper();
+        }
 
 
         [TestInitialize]
@@ -30,60 +46,14 @@ namespace TxAssigmentUnitTests.Services
         public async Task CreateCabinet_ShouldReturnSuccess_WhenCabinetIsValid()
         {
             // Arrange
-            var cabinetModel = new ModelCabinet
-            {
-                Id = Guid.NewGuid(),
-                Number = 1,
-                Position = new ModelPosition { X = 10, Y = 20, Z = 0 },
-                Size = new ModelSize { Width = 100, Depth = 50, Height = 200 },
-                Rows = new List<ModelRow>
-                {
-                    new ModelRow
-                    {
-                        Number = 1,
-                        PositionZ = 50,
-                        Size = new ModelSize { Height = 40 },
-                        Lanes = new List<ModelLane>
-                        {
-                            new ModelLane
-                            {
-                                Number = 1,
-                                Products = new List<ModelProduct>(),
-                                PositionX = 0
-                            },
-                        }
-                    },
-                }
-            };
+            var cabinetEntity = new MockBuilderCabinet()
+                                .BuildRow(1, 50, new Size { Height = 40 })
+                                .BuildLane(1, 0)
+                                .BuildProduct("4012391230", "Coca-Cola", 10, 5, 5)
+                                .BuildProduct("4012391212", "あおいおちゃ", 15, 5, 5)
+                                .Build();
 
-            var cabinetEntity = new Cabinet
-            {
-                Id = Guid.NewGuid(),
-                Number = 1,
-                Position = new Position { X = 10, Y = 20, Z = 0 },
-                Size = new Size { Width = 100, Depth = 50, Height = 200 },
-                Rows = new List<Row>
-                {
-                    new Row
-                    {
-                        Number = 1,
-                        PositionZ = 50,
-                        Size = new Size { Height = 40 },
-                        Lanes = new List<Lane>
-                        {
-                            new Lane
-                            {
-                                Number = 1,
-                                Products = new List<Product>(),
-                                PositionX = 0
-                            },
-                        }
-                    },
-                }
-            };
-
-
-           
+            var cabinetModel = _mapper.Map<ModelCabinet>(cabinetEntity);
 
             _mockMapper.Setup(m => m.Map<Cabinet>(It.IsAny<ModelCabinet>())).Returns(cabinetEntity);
             _mockRepo.Setup(r => r.CreateCabinet(cabinetEntity)).ReturnsAsync(new RepositoryResponse { Success = true });
@@ -92,6 +62,7 @@ namespace TxAssigmentUnitTests.Services
             var result = await _service.CreateCabinet(cabinetModel);
 
             // Assert
+            cabinetEntity.Should().BeEquivalentTo(cabinetModel, options => options.ComparingByMembers<ModelCabinet>());
             Assert.IsTrue(result.Success);
             Assert.AreEqual("Cabinet created successfully.", result.Message);
             _mockRepo.Verify(r => r.CreateCabinet(cabinetEntity), Times.Once);

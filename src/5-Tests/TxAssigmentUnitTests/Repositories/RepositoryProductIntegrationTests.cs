@@ -1,7 +1,6 @@
 ﻿using StackExchange.Redis;
+using TxAssigmentUnitTests.Mocks;
 using TxAssignmentInfra.Connectors;
-using TxAssignmentInfra.Entities;
-using TxAssignmentInfra.Entities.Enumerators;
 using TxAssignmentInfra.Repositories;
 
 
@@ -24,20 +23,13 @@ namespace TxAssigmentUnitTests.Repositories
         public async Task CreateProduct_IntegrationTest()
         {
             // Arrange
-            var product = new Product
-            {
-                Id = Guid.NewGuid(),
-                JanCode = $"{Guid.NewGuid()}",
-                Depth = 0.308,
-                Height = 0.097,
-                Width = 0.097,
-                Size = 1500,
-                ImageUrl = "https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg",
-                Name = "Coca -Cola 1500ml",
-                Shape = EnumProductShape.Bottle,
-                TimeStamp = 1659397548
-            };
-
+            var product = new MockBuilderProduct()
+                            .WithJanCode("1238172783910921")
+                            .WithDimensions(0.097, 0.308, 0.097)
+                            .WithSize(1500)
+                            .WithImageUrl("https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg")
+                            .WithTimeStamp(1659397548)
+                            .Build();
             // Act
             var createResponse = await _repository.CreateProduct(product);
 

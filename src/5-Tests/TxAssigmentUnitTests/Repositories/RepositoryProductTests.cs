@@ -1,6 +1,7 @@
 ﻿using Moq;
 using Newtonsoft.Json;
 using StackExchange.Redis;
+using TxAssigmentUnitTests.Mocks;
 using TxAssignmentInfra.Entities;
 using TxAssignmentInfra.Entities.Enumerators;
 using TxAssignmentInfra.Repositories;
@@ -21,19 +22,13 @@ namespace TxAssigmentUnitTests.Repositories
             _mockDatabase = new Mock<IDatabase>();
             _repository = new RepositoryProduct(_mockDatabase.Object);
 
-            _testProduct = new Product
-            {
-                Id = Guid.NewGuid(),
-                JanCode = $"{Guid.NewGuid()}",
-                Depth = 0.308,
-                Height = 0.097,
-                Width = 0.097,
-                Size = 1500,
-                ImageUrl = "https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg",
-                Name = "Coca -Cola 1500ml",
-                Shape = EnumProductShape.Bottle,
-                TimeStamp = 1659397548
-            };
+            _testProduct = new MockBuilderProduct()
+                            .WithJanCode("1238172783910921")
+                            .WithDimensions(0.097,0.308, 0.097)
+                            .WithSize(1500)
+                            .WithImageUrl("https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg")
+                            .WithTimeStamp(1659397548)
+                            .Build();
         }
 
         [TestMethod]

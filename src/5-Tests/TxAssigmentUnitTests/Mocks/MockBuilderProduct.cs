@@ -1,15 +1,15 @@
-﻿using TxAssignmentInfra.Entities.Enumerators;
-using TxAssignmentServices.Models;
+﻿using TxAssignmentInfra.Entities;
+using TxAssignmentInfra.Entities.Enumerators;
 
 namespace TxAssigmentUnitTests.Mocks
 {
     public class MockBuilderProduct
     {
-        private ModelProduct _product;
+        private Product _product;
 
         public MockBuilderProduct()
         {
-            _product = new ModelProduct();
+            _product = new Product();
         }
 
         public MockBuilderProduct WithJanCode(string janCode)
@@ -56,7 +56,7 @@ namespace TxAssigmentUnitTests.Mocks
             return this;
         }
 
-        public ModelProduct Build()
+        public Product Build()
         {
             return _product;
         }

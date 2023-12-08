@@ -4,6 +4,7 @@ using StackExchange.Redis;
 using TxAssignmentInfra.Entities.Enumerators;
 using TxAssignmentInfra.Entities;
 using TxAssignmentInfra.Repositories;
+using TxAssigmentUnitTests.Mocks;
 
 namespace TxAssigmentUnitTests.Repositories
 {
@@ -21,31 +22,12 @@ namespace TxAssigmentUnitTests.Repositories
             _mockDatabase = new Mock<IDatabase>();
             _repository = new RepositoryCabinet(_mockDatabase.Object);
 
-            _testCabinet = new Cabinet
-            {
-                Id = Guid.NewGuid(),
-                Number = 1,
-                Position = new Position { X = 10, Y = 20, Z = 0 },
-                Size = new Size { Width = 100, Depth = 50, Height = 200 },
-                Rows = new List<Row>
-                {
-                    new Row
-                    {
-                        Number = 1,
-                        PositionZ = 50,
-                        Size = new Size { Height = 40 },
-                        Lanes = new List<Lane>
-                        {
-                            new Lane
-                            {
-                                Number = 1,
-                                Products = new List<Product>(),
-                                PositionX = 0 
-                            },
-                        }
-                    },
-                }
-            };
+            _testCabinet = new MockBuilderCabinet()
+                                .BuildRow(1, 50, new Size { Height = 40 })
+                                .BuildLane(1, 0)
+                                .BuildProduct("4012391230", "Coca-Cola", 10, 5, 5)
+                                .BuildProduct("4012391212", "あおいお茶", 15, 5, 5)
+                                .Build();
         }
 
         [TestMethod]
