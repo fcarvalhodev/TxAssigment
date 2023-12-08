@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxAssignmentInfra", "src\4-Infra\TxAssignmentInfra\TxAssignmentInfra.csproj", "{4747C4B7-58F2-4B7B-9FF0-FF043485BD17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxAssignmentInfra", "src\4-Infra\TxAssignmentInfra\TxAssignmentInfra.csproj", "{4747C4B7-58F2-4B7B-9FF0-FF043485BD17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxAssignmentServices", "src\3-Services\TxAssignmentServices\TxAssignmentServices.csproj", "{E41960CD-152C-4FCE-81FC-6E01BBD2D8BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxAssignmentServices", "src\3-Services\TxAssignmentServices\TxAssignmentServices.csproj", "{E41960CD-152C-4FCE-81FC-6E01BBD2D8BA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Client", "1-Client", "{3EBB15A9-BE38-4295-8B67-8657A22D2AAC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Client", "2-Client", "{3EBB15A9-BE38-4295-8B67-8657A22D2AAC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Api", "2-Api", "{1CD7C791-E551-4214-8553-5FE8A0215A39}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Api", "1-Api", "{1CD7C791-E551-4214-8553-5FE8A0215A39}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Services", "3-Services", "{4874F960-7DC3-4F5B-997E-7483B2315194}"
 EndProject
@@ -17,11 +17,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Infra", "4-Infra", "{B7D4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Tests", "5-Tests", "{5E814D3C-7A30-4725-8E05-5A4A66DC9E13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxAssigmentApi", "src\2-Api\TxAssigmentApi\TxAssigmentApi.csproj", "{43A9E2D1-F9A5-40EC-BF61-E8C8D7589135}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxAssigmentUnitTests", "src\5-Tests\TxAssigmentUnitTests\TxAssigmentUnitTests.csproj", "{6BF02085-A22B-4CB1-9211-74D798CBA523}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxAssgimentClient", "src\1-Client\TxAssgimentClient\TxAssgimentClient.csproj", "{69B716F9-B809-4ACC-83F3-4057BFBEC7CE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6-SolutionItems", "6-SolutionItems", "{CD86A07E-7892-42B1-BDDE-75C4B3D64091}"
+	ProjectSection(SolutionItems) = preProject
+		src\6-SolutionItems\shelf (1).json = src\6-SolutionItems\shelf (1).json
+		src\6-SolutionItems\sku.csv = src\6-SolutionItems\sku.csv
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxAssigmentUnitTests", "src\5-Tests\TxAssigmentUnitTests\TxAssigmentUnitTests.csproj", "{6BF02085-A22B-4CB1-9211-74D798CBA523}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxAssigmentApi", "src\1-Api\TxAssigmentApi\TxAssigmentApi.csproj", "{6E6BA501-2970-49D9-907E-DBC7A541E3C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TxAssgimentClient", "src\2-Client\TxAssgimentClient\TxAssgimentClient.csproj", "{00EF35A5-D3E5-41F3-BA7F-25CC1D9B2D61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,18 +43,18 @@ Global
 		{E41960CD-152C-4FCE-81FC-6E01BBD2D8BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E41960CD-152C-4FCE-81FC-6E01BBD2D8BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E41960CD-152C-4FCE-81FC-6E01BBD2D8BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{43A9E2D1-F9A5-40EC-BF61-E8C8D7589135}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43A9E2D1-F9A5-40EC-BF61-E8C8D7589135}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43A9E2D1-F9A5-40EC-BF61-E8C8D7589135}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43A9E2D1-F9A5-40EC-BF61-E8C8D7589135}.Release|Any CPU.Build.0 = Release|Any CPU
-		{69B716F9-B809-4ACC-83F3-4057BFBEC7CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69B716F9-B809-4ACC-83F3-4057BFBEC7CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69B716F9-B809-4ACC-83F3-4057BFBEC7CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69B716F9-B809-4ACC-83F3-4057BFBEC7CE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6BF02085-A22B-4CB1-9211-74D798CBA523}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6BF02085-A22B-4CB1-9211-74D798CBA523}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BF02085-A22B-4CB1-9211-74D798CBA523}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BF02085-A22B-4CB1-9211-74D798CBA523}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E6BA501-2970-49D9-907E-DBC7A541E3C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E6BA501-2970-49D9-907E-DBC7A541E3C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E6BA501-2970-49D9-907E-DBC7A541E3C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E6BA501-2970-49D9-907E-DBC7A541E3C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00EF35A5-D3E5-41F3-BA7F-25CC1D9B2D61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00EF35A5-D3E5-41F3-BA7F-25CC1D9B2D61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00EF35A5-D3E5-41F3-BA7F-25CC1D9B2D61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00EF35A5-D3E5-41F3-BA7F-25CC1D9B2D61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,9 +62,9 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4747C4B7-58F2-4B7B-9FF0-FF043485BD17} = {B7D477D1-72E2-4219-BEB3-EC492C372274}
 		{E41960CD-152C-4FCE-81FC-6E01BBD2D8BA} = {4874F960-7DC3-4F5B-997E-7483B2315194}
-		{43A9E2D1-F9A5-40EC-BF61-E8C8D7589135} = {1CD7C791-E551-4214-8553-5FE8A0215A39}
-		{69B716F9-B809-4ACC-83F3-4057BFBEC7CE} = {3EBB15A9-BE38-4295-8B67-8657A22D2AAC}
 		{6BF02085-A22B-4CB1-9211-74D798CBA523} = {5E814D3C-7A30-4725-8E05-5A4A66DC9E13}
+		{6E6BA501-2970-49D9-907E-DBC7A541E3C3} = {1CD7C791-E551-4214-8553-5FE8A0215A39}
+		{00EF35A5-D3E5-41F3-BA7F-25CC1D9B2D61} = {3EBB15A9-BE38-4295-8B67-8657A22D2AAC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B16804C3-D371-4DA7-BB7B-E2E5F2364C2B}

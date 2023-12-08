@@ -89,10 +89,5 @@ namespace TxAssignmentInfra.Repositories
                 return new RepositoryResponse { Success = false, Message = ex.Message };
             }
         }
-
-        public Task<RepositoryResponse<Cabinet>> GetEmptySpaceOnCabinet(Guid IdProduct)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

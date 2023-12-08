@@ -1,0 +1,589 @@
+{
+    "Cabinets": [
+        {
+            "Number": 1,
+            "Rows": [
+                {
+                    "Number": 1,
+                    "Lanes": [
+                        {
+                            "Number": 1,
+                            "JanCode": "4902102112457",
+                            "Quantity": 10,
+                            "PositionX": 5
+                        },
+                        {
+                            "Number": 2,
+                            "JanCode": "4902102112464",
+                            "Quantity": 15,
+                            "PositionX": 10
+                        },
+                        {
+                            "Number": 3,
+                            "JanCode": "4902102112471",
+                            "Quantity": 12,
+                            "PositionX": 15
+                        },
+                        {
+                            "Number": 4,
+                            "JanCode": "4902102112488",
+                            "Quantity": 8,
+                            "PositionX": 20
+                        },
+                        {
+                            "Number": 5,
+                            "JanCode": "4902102112495",
+                            "Quantity": 9,
+                            "PositionX": 25
+                        },
+                        {
+                            "Number": 6,
+                            "JanCode": "4902102112501",
+                            "Quantity": 11,
+                            "PositionX": 30
+                        }
+                    ],
+                    "PositionZ": 50,
+                    "Size": {
+                        "Height": 40
+                    }
+                },
+                {
+                    "Number": 2,
+                    "Lanes": [
+                        {
+                            "Number": 7,
+                            "JanCode": "4902102112518",
+                            "Quantity": 13,
+                            "PositionX": 5
+                        },
+                        {
+                            "Number": 8,
+                            "JanCode": "4902102112525",
+                            "Quantity": 14,
+                            "PositionX": 10
+                        },
+                        {
+                            "Number": 9,
+                            "JanCode": "4902102112532",
+                            "Quantity": 10,
+                            "PositionX": 15
+                        },
+                        {
+                            "Number": 10,
+                            "JanCode": "4902102112549",
+                            "Quantity": 7,
+                            "PositionX": 20
+                        },
+                        {
+                            "Number": 11,
+                            "JanCode": "4902102112556",
+                            "Quantity": 6,
+                            "PositionX": 25
+                        },
+                        {
+                            "Number": 12,
+                            "JanCode": "4902102112563",
+                            "Quantity": 5,
+                            "PositionX": 30
+                        }
+                    ],
+                    "PositionZ": 100,
+                    "Size": {
+                        "Height": 40
+                    }
+                },
+                {
+                    "Number": 3,
+                    "Lanes": [
+                        {
+                            "Number": 13,
+                            "JanCode": "4902102112570",
+                            "Quantity": 4,
+                            "PositionX": 5
+                        },
+                        {
+                            "Number": 14,
+                            "JanCode": "4902102112587",
+                            "Quantity": 3,
+                            "PositionX": 10
+                        },
+                        {
+                            "Number": 15,
+                            "JanCode": "4902102112594",
+                            "Quantity": 2,
+                            "PositionX": 15
+                        },
+                        {
+                            "Number": 16,
+                            "JanCode": "4902102112600",
+                            "Quantity": 1,
+                            "PositionX": 20
+                        },
+                        {
+                            "Number": 17,
+                            "JanCode": "4902102112617",
+                            "Quantity": 15,
+                            "PositionX": 25
+                        },
+                        {
+                            "Number": 18,
+                            "JanCode": "4902102112624",
+                            "Quantity": 16,
+                            "PositionX": 30
+                        }
+                    ],
+                    "PositionZ": 150,
+                    "Size": {
+                        "Height": 40
+                    }
+                },
+                {
+                    "Number": 4,
+                    "Lanes": [
+                        {
+                            "Number": 19,
+                            "JanCode": "4902102112631",
+                            "Quantity": 17,
+                            "PositionX": 5
+                        },
+                        {
+                            "Number": 20,
+                            "JanCode": "4902102112648",
+                            "Quantity": 18,
+                            "PositionX": 10
+                        },
+                        {
+                            "Number": 21,
+                            "JanCode": "4902102112655",
+                            "Quantity": 19,
+                            "PositionX": 15
+                        },
+                        {
+                            "Number": 22,
+                            "JanCode": "4902102112662",
+                            "Quantity": 20,
+                            "PositionX": 20
+                        },
+                        {
+                            "Number": 23,
+                            "JanCode": "4902102112679",
+                            "Quantity": 21,
+                            "PositionX": 25
+                        },
+                        {
+                            "Number": 24,
+                            "JanCode": "4902102112686",
+                            "Quantity": 22,
+                            "PositionX": 30
+                        }
+                    ],
+                    "PositionZ": 200,
+                    "Size": {
+                        "Height": 40
+                    }
+                }
+            ],
+            "Position": {
+                "X": 10,
+                "Y": 20,
+                "Z": 0
+            },
+            "Size": {
+                "Width": 100,
+                "Depth": 50,
+                "Height": 200
+            }
+        },
+        {
+            "Number": 2,
+            "Rows": [
+                {
+                    "Number": 1,
+                    "Lanes": [
+                        {
+                            "Number": 1,
+                            "JanCode": "4902102112693",
+                            "Quantity": 23,
+                            "PositionX": 5
+                        },
+                        {
+                            "Number": 2,
+                            "JanCode": "4902102112709",
+                            "Quantity": 24,
+                            "PositionX": 10
+                        },
+                        {
+                            "Number": 3,
+                            "JanCode": "4902102112716",
+                            "Quantity": 25,
+                            "PositionX": 15
+                        },
+                        {
+                            "Number": 4,
+                            "JanCode": "4902102112723",
+                            "Quantity": 26,
+                            "PositionX": 20
+                        },
+                        {
+                            "Number": 5,
+                            "JanCode": "4902102112730",
+                            "Quantity": 27,
+                            "PositionX": 25
+                        },
+                        {
+                            "Number": 6,
+                            "JanCode": "4902102112747",
+                            "Quantity": 28,
+                            "PositionX": 30
+                        }
+                    ],
+                    "PositionZ": 50,
+                    "Size": {
+                        "Height": 40
+                    }
+                },
+                {
+                    "Number": 2,
+                    "Lanes": [
+                        {
+                            "Number": 7,
+                            "JanCode": "4902102112754",
+                            "Quantity": 29,
+                            "PositionX": 5
+                        },
+                        {
+                            "Number": 8,
+                            "JanCode": "4902102112761",
+                            "Quantity": 30,
+                            "PositionX": 10
+                        },
+                        {
+                            "Number": 9,
+                            "JanCode": "4902102112778",
+                            "Quantity": 31,
+                            "PositionX": 15
+                        },
+                        {
+                            "Number": 10,
+                            "JanCode": "4902102112785",
+                            "Quantity": 32,
+                            "PositionX": 20
+                        },
+                        {
+                            "Number": 11,
+                            "JanCode": "4902102112792",
+                            "Quantity": 33,
+                            "PositionX": 25
+                        },
+                        {
+                            "Number": 12,
+                            "JanCode": "4902102112808",
+                            "Quantity": 34,
+                            "PositionX": 30
+                        }
+                    ],
+                    "PositionZ": 100,
+                    "Size": {
+                        "Height": 40
+                    }
+                },
+                {
+                    "Number": 3,
+                    "Lanes": [
+                        {
+                            "Number": 13,
+                            "JanCode": "4902102112815",
+                            "Quantity": 35,
+                            "PositionX": 5
+                        },
+                        {
+                            "Number": 14,
+                            "JanCode": "4902102112822",
+                            "Quantity": 36,
+                            "PositionX": 10
+                        },
+                        {
+                            "Number": 15,
+                            "JanCode": "4902102112839",
+                            "Quantity": 37,
+                            "PositionX": 15
+                        },
+                        {
+                            "Number": 16,
+                            "JanCode": "4902102112846",
+                            "Quantity": 38,
+                            "PositionX": 20
+                        },
+                        {
+                            "Number": 17,
+                            "JanCode": "4902102112853",
+                            "Quantity": 39,
+                            "PositionX": 25
+                        },
+                        {
+                            "Number": 18,
+                            "JanCode": "4902102112860",
+                            "Quantity": 40,
+                            "PositionX": 30
+                        }
+                    ],
+                    "PositionZ": 150,
+                    "Size": {
+                        "Height": 40
+                    }
+                },
+                {
+                    "Number": 4,
+                    "Lanes": [
+                        {
+                            "Number": 19,
+                            "JanCode": "4902102112877",
+                            "Quantity": 41,
+                            "PositionX": 5
+                        },
+                        {
+                            "Number": 20,
+                            "JanCode": "4902102112884",
+                            "Quantity": 42,
+                            "PositionX": 10
+                        },
+                        {
+                            "Number": 21,
+                            "JanCode": "4902102112891",
+                            "Quantity": 43,
+                            "PositionX": 15
+                        },
+                        {
+                            "Number": 22,
+                            "JanCode": "4902102112907",
+                            "Quantity": 44,
+                            "PositionX": 20
+                        },
+                        {
+                            "Number": 23,
+                            "JanCode": "4902102112914",
+                            "Quantity": 45,
+                            "PositionX": 25
+                        },
+                        {
+                            "Number": 24,
+                            "JanCode": "4902102112921",
+                            "Quantity": 46,
+                            "PositionX": 30
+                        }
+                    ],
+                    "PositionZ": 200,
+                    "Size": {
+                        "Height": 40
+                    }
+                }
+            ],
+            "Position": {
+                "X": 15,
+                "Y": 25,
+                "Z": 5
+            },
+            "Size": {
+                "Width": 105,
+                "Depth": 55,
+                "Height": 205
+            }
+        },
+        {
+            "Number": 3,
+            "Rows": [
+                {
+                    "Number": 1,
+                    "Lanes": [
+                        {
+                            "Number": 1,
+                            "JanCode": "4902102112938",
+                            "Quantity": 47,
+                            "PositionX": 5
+                        },
+                        {
+                            "Number": 2,
+                            "JanCode": "4902102112945",
+                            "Quantity": 48,
+                            "PositionX": 10
+                        },
+                        {
+                            "Number": 3,
+                            "JanCode": "4902102112952",
+                            "Quantity": 49,
+                            "PositionX": 15
+                        },
+                        {
+                            "Number": 4,
+                            "JanCode": "4902102112969",
+                            "Quantity": 50,
+                            "PositionX": 20
+                        },
+                        {
+                            "Number": 5,
+                            "JanCode": "4902102112976",
+                            "Quantity": 51,
+                            "PositionX": 25
+                        },
+                        {
+                            "Number": 6,
+                            "JanCode": "4902102112983",
+                            "Quantity": 52,
+                            "PositionX": 30
+                        }
+                    ],
+                    "PositionZ": 50,
+                    "Size": {
+                        "Height": 40
+                    }
+                },
+                {
+                    "Number": 2,
+                    "Lanes": [
+                        {
+                            "Number": 7,
+                            "JanCode": "4902102112990",
+                            "Quantity": 53,
+                            "PositionX": 5
+                        },
+                        {
+                            "Number": 8,
+                            "JanCode": "4902102113003",
+                            "Quantity": 54,
+                            "PositionX": 10
+                        },
+                        {
+                            "Number": 9,
+                            "JanCode": "4902102113010",
+                            "Quantity": 55,
+                            "PositionX": 15
+                        },
+                        {
+                            "Number": 10,
+                            "JanCode": "4902102113027",
+                            "Quantity": 56,
+                            "PositionX": 20
+                        },
+                        {
+                            "Number": 11,
+                            "JanCode": "4902102113034",
+                            "Quantity": 57,
+                            "PositionX": 25
+                        },
+                        {
+                            "Number": 12,
+                            "JanCode": "4902102113041",
+                            "Quantity": 58,
+                            "PositionX": 30
+                        }
+                    ],
+                    "PositionZ": 100,
+                    "Size": {
+                        "Height": 40
+                    }
+                },
+                {
+                    "Number": 3,
+                    "Lanes": [
+                        {
+                            "Number": 13,
+                            "JanCode": "4902102113058",
+                            "Quantity": 59,
+                            "PositionX": 5
+                        },
+                        {
+                            "Number": 14,
+                            "JanCode": "4902102113065",
+                            "Quantity": 60,
+                            "PositionX": 10
+                        },
+                        {
+                            "Number": 15,
+                            "JanCode": "4902102113072",
+                            "Quantity": 61,
+                            "PositionX": 15
+                        },
+                        {
+                            "Number": 16,
+                            "JanCode": "4902102113089",
+                            "Quantity": 62,
+                            "PositionX": 20
+                        },
+                        {
+                            "Number": 17,
+                            "JanCode": "4902102113096",
+                            "Quantity": 63,
+                            "PositionX": 25
+                        },
+                        {
+                            "Number": 18,
+                            "JanCode": "4902102113102",
+                            "Quantity": 64,
+                            "PositionX": 30
+                        }
+                    ],
+                    "PositionZ": 150,
+                    "Size": {
+                        "Height": 40
+                    }
+                },
+                {
+                    "Number": 4,
+                    "Lanes": [
+                        {
+                            "Number": 19,
+                            "JanCode": "4902102113119",
+                            "Quantity": 65,
+                            "PositionX": 5
+                        },
+                        {
+                            "Number": 20,
+                            "JanCode": "4902102113126",
+                            "Quantity": 66,
+                            "PositionX": 10
+                        },
+                        {
+                            "Number": 21,
+                            "JanCode": "4902102113133",
+                            "Quantity": 67,
+                            "PositionX": 15
+                        },
+                        {
+                            "Number": 22,
+                            "JanCode": "4902102113140",
+                            "Quantity": 68,
+                            "PositionX": 20
+                        },
+                        {
+                            "Number": 23,
+                            "JanCode": "4902102113157",
+                            "Quantity": 69,
+                            "PositionX": 25
+                        },
+                        {
+                            "Number": 24,
+                            "JanCode": "4902102113140",
+                            "Quantity": 70,
+                            "PositionX": 30
+                        }
+                    ],
+                    "PositionZ": 200,
+                    "Size": {
+                        "Height": 40
+                    }
+                }
+            ],
+            "Position": {
+                "X": 20,
+                "Y": 30,
+                "Z": 10
+            },
+            "Size": {
+                "Width": 110,
+                "Depth": 60,
+                "Height": 210
+            }
+        }
+    ]
+}
