@@ -1,5 +1,4 @@
 ﻿using TxAssignmentInfra.Entities;
-using TxAssignmentInfra.Entities.Enumerators;
 
 namespace TxAssigmentUnitTests.Mocks
 {
@@ -19,6 +18,30 @@ namespace TxAssigmentUnitTests.Mocks
             };
         }
 
+        public MockBuilderCabinet WithId(Guid Id)
+        {
+            _cabinet.Id = Id;
+            return this;
+        }
+
+        public MockBuilderCabinet WithNumber(int number)
+        {
+            _cabinet.Number = number;
+            return this;
+        }
+
+        public MockBuilderCabinet WithPosition(Position position)
+        {
+            _cabinet.Position = position;
+            return this;
+        }
+
+        public MockBuilderCabinet WithSize(Size size)
+        {
+            _cabinet.Size = size;
+            return this;
+        }
+
         public MockBuilderCabinet BuildRow(int rowNumber, int positionZ, Size size)
         {
             var row = new Row
@@ -32,7 +55,7 @@ namespace TxAssigmentUnitTests.Mocks
             return this;
         }
 
-        public MockBuilderCabinet BuildLane(int laneNumber, int positionX)
+        public MockBuilderCabinet BuildLane(int laneNumber, int positionX, string janCode, int quantity)
         {
             var lastRow = _cabinet.Rows.LastOrDefault();
             if (lastRow != null)
@@ -40,31 +63,11 @@ namespace TxAssigmentUnitTests.Mocks
                 var lane = new Lane
                 {
                     Number = laneNumber,
-                    Products = new List<Product>(),
+                    PositionX = positionX,
+                    Quantity = quantity,
+                    JanCode = janCode
                 };
                 lastRow.Lanes.Add(lane);
-            }
-            return this;
-        }
-
-        public MockBuilderCabinet BuildProduct(string janCode, string name, double width, double depth, double height, string ImageUrl, int size, long timeStamp, EnumProductShape shape)
-        {
-            var lastLane = _cabinet.Rows.LastOrDefault()?.Lanes.LastOrDefault();
-            if (lastLane != null)
-            {
-                var product = new Product
-                {
-                    JanCode = janCode,
-                    Name = name,
-                    Width = width,
-                    Depth = depth,
-                    Height = height,
-                    ImageUrl = ImageUrl,
-                    Size = size,
-                    TimeStamp = timeStamp,
-                    Shape = shape,
-                };
-                lastLane.Products.Add(product);
             }
             return this;
         }

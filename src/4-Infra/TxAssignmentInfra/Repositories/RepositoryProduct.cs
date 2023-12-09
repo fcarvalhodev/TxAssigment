@@ -39,6 +39,11 @@ namespace TxAssignmentInfra.Repositories
         {
             try
             {
+                var existingProduct = await GetProductByJanCode(product.JanCode);
+                if (existingProduct != null)
+                    return new RepositoryResponse { Success = false, Message = "The product already exists on the database" };
+
+
                 var serializedProduct = JsonConvert.SerializeObject(product);
                 await _database.StringSetAsync(product.Id.ToString(), serializedProduct);
                 return new RepositoryResponse { Success = true, Message = "Product created successfully." };
@@ -87,6 +92,27 @@ namespace TxAssignmentInfra.Repositories
             catch (Exception ex)
             {
                 return new RepositoryResponse { Success = false, Message = ex.Message };
+            }
+        }
+
+        public async Task<RepositoryResponse<Product>> GetProductByJanCode(string janCode)
+        {
+            try
+            {
+                var serializedProduct = await _database.StringGetAsync(janCode);
+
+                if (serializedProduct.IsNullOrEmpty)
+                {
+                    return new RepositoryResponse<Product> { Success = false, Message = "Product not found." };
+
+                }
+
+                var product = JsonConvert.DeserializeObject<Product>(serializedProduct);
+                return new RepositoryResponse<Product> { Success = true, Data = product };
+            }
+            catch (Exception ex)
+            {
+                return new RepositoryResponse<Product> { Success = false, Message = ex.Message };
             }
         }
     }

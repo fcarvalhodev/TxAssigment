@@ -3,11 +3,8 @@
     public class Lane : BaseEntity
     {
         public int Number { get; set; }
-        public List<Product> Products { get; set; }
-
-        public Lane()
-        {
-            Products = new List<Product>();
-        }
+        public string JanCode { get; set; }
+        public int PositionX { get; set; }
+        public int Quantity { get; set; }
     }
 }

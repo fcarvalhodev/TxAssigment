@@ -24,9 +24,8 @@ namespace TxAssigmentUnitTests.Repositories
 
             _testCabinet = new MockBuilderCabinet()
                                 .BuildRow(1, 50, new Size { Height = 40 })
-                                .BuildLane(1, 0)
-                                .BuildProduct("4902102113102", "クラフトボスフルーツティー/Craft boss fruit tea 600ml", 0.072, 0.072, 0.212, "https://operationmanagerstorage.blob.core.windows.net/skus/4901777375826_1685668163.jpg", 600, 1659397548, EnumProductShape.Bottle)
-                                .BuildProduct("4902102113133", "アクエリアス/Aquarius 950ml", 0.069, 0.069, 0.274, "https://operationmanagerstorage.blob.core.windows.net/skus/4902102137621_1682413847.jpg", 950, 1659397548, EnumProductShape.Bottle)
+                                .BuildLane(1, 5, "4902102113102", 20)
+                                .BuildLane(2, 10,"4902102112594", 13)
                                 .Build();
         }
 

@@ -76,6 +76,7 @@ namespace TxAssignmentInfra.Repositories
                     return new RepositoryResponse { Success = false, Message = "Cabinet not found." };
                 }
 
+                cabinet.Id = IdCabinet;
                 var serializedCabinet = JsonConvert.SerializeObject(cabinet);
                 bool updated = await _database.StringSetAsync(key, serializedCabinet);
                 return new RepositoryResponse

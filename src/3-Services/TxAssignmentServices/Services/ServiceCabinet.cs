@@ -9,14 +9,16 @@ namespace TxAssignmentServices.Services
     public class ServiceCabinet : IServiceCabinet
     {
         private readonly IRepositoryCabinet _repositoryCabinet;
+        private readonly IRepositoryProduct _repositoryProduct;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public ServiceCabinet(IRepositoryCabinet repositoryCabinet, IMapper mapper, ILogger logger)
+        public ServiceCabinet(IRepositoryCabinet repositoryCabinet, IRepositoryProduct repositoryProduct, IMapper mapper, ILogger logger)
         {
             _mapper = mapper;
             _repositoryCabinet = repositoryCabinet;
             _logger = logger;
+            _repositoryProduct = repositoryProduct;
         }
 
         public async Task<ServiceResponse> CreateCabinet(ModelCabinet cabinet)
@@ -27,6 +29,24 @@ namespace TxAssignmentServices.Services
                 {
                     _logger.LogWarning("CreateCabinet called with null cabinet.");
                     return new ServiceResponse { Success = false, Message = "Cabinet cannot be null" };
+                }
+
+                if (ValidateRowsForCabinet(cabinet.Rows, cabinet.Size.Height))
+                    return new ServiceResponse { Success = false, Message = "The total height of the rows is larger than the cabinet's height." };
+
+                //Validations
+                foreach (var row in cabinet.Rows)
+                {
+                    var validateLane = ValidateLaneWidth(row.Lanes, cabinet.Size.Width);
+                    if (!validateLane.isValid)
+                        return new ServiceResponse { Success = false, Message = validateLane.errorMessage };
+
+                    //Validate Products
+                    var validationResult = ValidateLaneProducts(row.Lanes, new HashSet<string>());
+                    if (!validationResult.Success)
+                    {
+                        return validationResult;
+                    }
                 }
 
                 var result = await _repositoryCabinet.CreateCabinet(_mapper.Map<Cabinet>(cabinet));
@@ -40,7 +60,46 @@ namespace TxAssignmentServices.Services
                 _logger.LogError(ex, "Error occurred while creating a cabinet.");
                 return new ServiceResponse { Success = false, Message = ex.Message };
             }
+        }
 
+        public async Task<ServiceResponse> UpdateCabinet(Guid IdCabinet, ModelCabinet newCabinet)
+        {
+            try
+            {
+                var cabinetEntity = await _repositoryCabinet.GetCabinetById(IdCabinet);
+
+                if (cabinetEntity == null)
+                    return new ServiceResponse { Success = false, Message = "Cabinet cannot be null" };
+
+
+                if (ValidateRowsForCabinet(newCabinet.Rows, newCabinet.Size.Height))
+                    return new ServiceResponse { Success = false, Message = "The total height of the rows is larger than the cabinet's height." };
+
+                //Validations
+                foreach (var row in newCabinet.Rows)
+                {
+                    var validateLane = ValidateLaneWidth(row.Lanes, newCabinet.Size.Width);
+                    if (!validateLane.isValid)
+                        return new ServiceResponse { Success = false, Message = validateLane.errorMessage };
+
+                    //Validate Products
+                    var validationResult = ValidateLaneProducts(row.Lanes, new HashSet<string>());
+                    if (!validationResult.Success)
+                    {
+                        return validationResult;
+                    }
+                }
+
+                var result = await _repositoryCabinet.UpdateCabinet(IdCabinet, _mapper.Map<Cabinet>(newCabinet));
+                return result.Success ?
+                    new ServiceResponse { Success = true, Message = "Cabinet updated successfully." } :
+                    new ServiceResponse { Success = false, Message = result.Message };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while creating a cabinet.");
+                return new ServiceResponse { Success = false, Message = ex.Message };
+            }
         }
 
         public async Task<ServiceResponse> DeleteCabinet(Guid IdCabinet)
@@ -80,150 +139,71 @@ namespace TxAssignmentServices.Services
         }
 
 
-        public async Task<ServiceResponse> UpdateCabinet(Guid IdCabinet, ModelCabinet updatedCabinetModel)
+        #region .: Validations :.
+
+        private ServiceResponse ValidateLaneProducts(IEnumerable<ModelLane> lanes, HashSet<string> seenJanCodes)
         {
-            try
+            foreach (var lane in lanes)
             {
-                var existingCabinetResponse = await _repositoryCabinet.GetCabinetById(IdCabinet);
-                if (!existingCabinetResponse.Success)
-                    return new ServiceResponse { Success = false, Message = "Cabinet not found." };
-
-                var existingCabinet = _mapper.Map<ModelCabinet>(existingCabinetResponse.Data);
-
-                foreach (var updatedRow in updatedCabinetModel.Rows)
+                var productResponse = _repositoryProduct.GetProductByJanCode(lane.JanCode);
+                if (productResponse == null)
                 {
-                    foreach (var updatedLane in updatedRow.Lanes)
-                    {
-                        foreach (var updatedProduct in updatedLane.Products)
-                        {
-                            var existingProduct = FindProductByJanCode(existingCabinet, updatedProduct.JanCode);
-                            if (existingProduct != null)
-                            {
-                                if (!IsProductInCorrectLane(existingCabinet, updatedProduct.JanCode, updatedLane.Id))
-                                {
-                                    if (CanProductBeMovedToLane(updatedRow, updatedLane, updatedProduct))
-                                    {
-                                        MoveProductToLane(existingCabinet, updatedProduct, updatedLane.Id);
-                                    }
-                                    else
-                                    {
-                                        return new ServiceResponse { Success = false, Message = $"No space in lane for product {updatedProduct.JanCode}." };
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // If the product is new, try to add it to an existing or new lane
-                                if (!TryAddProductToExistingOrNewLane(existingCabinet, updatedProduct))
-                                {
-                                    return new ServiceResponse { Success = false, Message = $"No space in lane for new product {updatedProduct.JanCode}." };
-                                }
-                            }
-                        }
-                    }
+                    return new ServiceResponse { Success = false, Message = $"The product with JanCode {lane.JanCode} was not found in the database, you must register the product first." };
                 }
 
-                var updateResult = await _repositoryCabinet.UpdateCabinet(IdCabinet, _mapper.Map<Cabinet>(existingCabinet));
-                return updateResult.Success ?
-                    new ServiceResponse { Success = true, Message = "Cabinet updated successfully." } :
-                    new ServiceResponse { Success = false, Message = "Failed to update cabinet." };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred when trying to update the cabinet.");
-                return new ServiceResponse<ModelCabinet> { Success = false, Message = ex.Message };
-            }
-        }
-
-        private ModelProduct FindProductByJanCode(ModelCabinet cabinet, string janCode)
-        {
-            foreach (var row in cabinet.Rows)
-            {
-                foreach (var lane in row.Lanes)
+                if (!seenJanCodes.Add(lane.JanCode))
                 {
-                    var product = lane.Products.FirstOrDefault(p => p.JanCode == janCode);
-                    if (product != null)
-                    {
-                        return product;
-                    }
+                    return new ServiceResponse { Success = false, Message = $"The product with JanCode {lane.JanCode} is duplicated, please remove from one of the lanes." };
                 }
             }
-            return null; // Return null if product not found
+            return new ServiceResponse { Success = true };
         }
 
-        private bool IsProductInCorrectLane(ModelCabinet cabinet, string janCode, Guid laneId)
+        private bool ValidateRowsForCabinet(List<ModelRow> rows, int cabinetHeight)
         {
-            return cabinet.Rows.SelectMany(row => row.Lanes)
-                               .Any(lane => lane.Id == laneId && lane.Products.Any(p => p.JanCode == janCode));
+            return rows.Sum(me => me.Size.Height) > cabinetHeight;
         }
 
-        private bool CanProductBeMovedToLane(ModelRow row, ModelLane lane, ModelProduct product)
+        private (bool isValid, string errorMessage) ValidateLaneWidth(List<ModelLane> lanes, int cabinetWidth)
         {
-            double totalSpaceUsed = lane.Products.Sum(p => p.Width);
-            double availableSpace = row.Size.Width - totalSpaceUsed;
-            return availableSpace >= product.Width;
-        }
+            int totalLaneWidth = 0;
+            var orderedLanes = lanes.OrderBy(l => l.PositionX).ToList();
 
-        private void MoveProductToLane(ModelCabinet cabinet, ModelProduct product, Guid targetLaneId)
-        {
-            // Remove product from current lane
-            foreach (var row in cabinet.Rows)
+            for (int i = 0; i < orderedLanes.Count; i++)
             {
-                foreach (var lane in row.Lanes)
+                int laneWidth;
+                if (i == orderedLanes.Count - 1) 
                 {
-                    lane.Products.RemoveAll(p => p.JanCode == product.JanCode);
+                    laneWidth = cabinetWidth - orderedLanes[i].PositionX;
                 }
+                else
+                {
+                    laneWidth = orderedLanes[i + 1].PositionX - orderedLanes[i].PositionX;
+                }
+
+                if (laneWidth < 0)
+                {
+                    return (false, "Invalid lane configuration: Overlapping lanes.");
+                }
+
+                totalLaneWidth += laneWidth;
             }
 
-            // Add product to target lane
-            var targetLane = cabinet.Rows.SelectMany(r => r.Lanes).FirstOrDefault(l => l.Id == targetLaneId);
-            targetLane?.Products.Add(product);
-        }
-
-        private bool CanProductBeAddedToLane(ModelCabinet cabinet, ModelLane lane, ModelProduct product)
-        {
-            // Calculate the total width used by the products in the lane.
-            double totalWidthUsed = lane.Products.Sum(p => p.Width);
-            // The available width is the cabinet's width minus the used width.
-            double availableWidth = cabinet.Size.Width - totalWidthUsed;
-            // The product can be added if there's enough available width in the lane.
-            return availableWidth >= product.Width;
-        }
-
-        private bool TryAddProductToExistingOrNewLane(ModelCabinet cabinet, ModelProduct product)
-        {
-            foreach (var row in cabinet.Rows)
+            if (totalLaneWidth > cabinetWidth)
             {
-                foreach (var lane in row.Lanes)
-                {
-                    if (CanProductBeAddedToLane(cabinet, lane, product))
-                    {
-                        lane.Products.Add(product);
-                        return true;
-                    }
-                }
-
-                // No space in existing lanes, try to add a new lane if the total lanes' width does not exceed the cabinet width
-                double totalLanesWidth = row.Lanes.Sum(l => l.Width);
-                if (cabinet.Size.Width - totalLanesWidth >= product.Width)
-                {
-                    // The depth of the product must also not exceed the cabinet's depth
-                    if (product.Depth <= cabinet.Size.Depth)
-                    {
-                        row.Lanes.Add(new ModelLane
-                        {
-                            Products = new List<ModelProduct> { product }
-                        });
-                        return true;
-                    }
-                }
+                return (false, "The total width of the lanes is larger than the cabinet's width.");
             }
 
-            // No space found or could not add a new lane within the cabinet's constraints
-            return false;
+            return (true, string.Empty);
         }
 
 
+        private bool ValidateLaneWidth(int totalLaneWidth, int cabinetWidth)
+        {
+            return totalLaneWidth > cabinetWidth;
+        }
+
+        #endregion
     }
 }
 

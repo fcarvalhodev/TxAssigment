@@ -24,7 +24,7 @@ namespace TxAssigmentUnitTests.Repositories
 
             _testProduct = new MockBuilderProduct()
                             .WithJanCode("1238172783910921")
-                            .WithDimensions(0.097,0.308, 0.097)
+                            .WithDimensions(0.097, 0.308, 0.097)
                             .WithSize(1500)
                             .WithImageUrl("https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg")
                             .WithTimeStamp(1659397548)
@@ -107,6 +107,23 @@ namespace TxAssigmentUnitTests.Repositories
             // Assert
             Assert.IsFalse(response.Success);
             Assert.AreEqual("Failed to delete product.", response.Message);
+        }
+
+        [TestMethod]
+        public async Task GetProductByJanCode_ProductExists()
+        {
+            // Arrange
+            var serializedProduct = JsonConvert.SerializeObject(_testProduct);
+            _mockDatabase.Setup(db => db.StringGetAsync(It.IsAny<RedisKey>(), CommandFlags.None))
+                         .ReturnsAsync(serializedProduct);
+
+            // Act
+            var response = await _repository.GetProductByJanCode(_testProduct.JanCode);
+
+            // Assert
+            Assert.IsTrue(response.Success);
+            Assert.IsNotNull(response.Data);
+            Assert.AreEqual(_testProduct.JanCode, response.Data.JanCode);
         }
     }
 }

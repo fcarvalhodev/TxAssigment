@@ -3,11 +3,8 @@
     public class ModelLane : ModelBase
     {
         public int Number { get; set; }
-        public List<ModelProduct> Products { get; set; }
-
-        public ModelLane()
-        {
-            Products = new List<ModelProduct>();
-        }
+        public string JanCode { get; set; }
+        public int PositionX { get; set; }
+        public int Quantity { get; set; }
     }
 }
