@@ -1,4 +1,5 @@
 ﻿using TxAssignmentInfra.Entities;
+using TxAssignmentInfra.Entities.Enumerators;
 
 namespace TxAssigmentUnitTests.Mocks
 {
@@ -46,7 +47,7 @@ namespace TxAssigmentUnitTests.Mocks
             return this;
         }
 
-        public MockBuilderCabinet BuildProduct(string janCode, string name, double width, double depth, double height)
+        public MockBuilderCabinet BuildProduct(string janCode, string name, double width, double depth, double height, string ImageUrl, int size, long timeStamp, EnumProductShape shape)
         {
             var lastLane = _cabinet.Rows.LastOrDefault()?.Lanes.LastOrDefault();
             if (lastLane != null)
@@ -57,7 +58,11 @@ namespace TxAssigmentUnitTests.Mocks
                     Name = name,
                     Width = width,
                     Depth = depth,
-                    Height = height
+                    Height = height,
+                    ImageUrl = ImageUrl,
+                    Size = size,
+                    TimeStamp = timeStamp,
+                    Shape = shape,
                 };
                 lastLane.Products.Add(product);
             }

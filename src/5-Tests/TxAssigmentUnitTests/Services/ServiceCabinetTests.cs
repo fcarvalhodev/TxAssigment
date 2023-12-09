@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using TxAssigmentUnitTests.Mocks;
 using TxAssignmentInfra.Entities;
+using TxAssignmentInfra.Entities.Enumerators;
 using TxAssignmentInfra.Repositories;
 using TxAssignmentServices.Models;
 using TxAssignmentServices.Profiles;
@@ -49,8 +50,15 @@ namespace TxAssigmentUnitTests.Services
             var cabinetEntity = new MockBuilderCabinet()
                                 .BuildRow(1, 50, new Size { Height = 40 })
                                 .BuildLane(1, 0)
-                                .BuildProduct("4012391230", "Coca-Cola", 10, 5, 5)
-                                .BuildProduct("4012391212", "あおいおちゃ", 15, 5, 5)
+                                .BuildProduct("4902102112778", "午後の紅茶レモンティー/Afternoon tea lemon 500ml", 0.059, 0.059, 0.217, "https://operationmanagerstorage.blob.core.windows.net/skus/4909411084875_1685061792.jpg", 500, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112761", "午後の紅茶ミルクティー/Afternoon tea milk 500ml", 0.059, 0.059, 0.217, "https://operationmanagerstorage.blob.core.windows.net/skus/4909411084950_1685061819.jpg", 500, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112754", "紅茶花伝ロイヤルミルクティー/Kouchakaden Royal Milk 440ml", 0.069, 0.069, 0.174, "https://operationmanagerstorage.blob.core.windows.net/skus/4902102136716_1659397560.jpg", 440, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112747", "伊右衛門カフェジャスミンティーラテ/Cafe Jasmine Tea latte 500ml", 0.072, 0.072, 0.177, "https://operationmanagerstorage.blob.core.windows.net/skus/4901777381254_1659397560.jpg", 500, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112730", "ウェルチ１房分のぶどう/welch 1 bunch 470ml", 0.072, 0.072, 0.173, "https://operationmanagerstorage.blob.core.windows.net/skus/4901340064041_1659397560.jpg", 470, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112723", "トロピカーナ100%オレンジ/Tropicana 100%orange 330ml", 0.06, 0.06, 0.184, "https://operationmanagerstorage.blob.core.windows.net/skus/4909411073114_1659397561.jpg", 330, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112716", "サントリー天然水/Suntory Natural Water 2000ml", 0.091, 0.106, 0.311, "https://operationmanagerstorage.blob.core.windows.net/skus/4901777018686_1679809773.jpg", 2000, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112709", "エビアン/Evian750ml", 0.082, 0.082, 0.21, "https://operationmanagerstorage.blob.core.windows.net/skus/3068320116266_1659397561.jpg", 750, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112693", "天然水きりっと果実オレンジ＆マンゴー/Dried fruit orange & mango Water600ml", 0.068, 0.068, 0.224, "https://operationmanagerstorage.blob.core.windows.net/skus/4901777375901_1678168618.jpg", 600, 1659397548, EnumProductShape.Bottle)
                                 .Build();
 
             var cabinetModel = _mapper.Map<ModelCabinet>(cabinetEntity);
@@ -114,8 +122,15 @@ namespace TxAssigmentUnitTests.Services
             var cabinetEntity = new MockBuilderCabinet()
                                 .BuildRow(1, 50, new Size { Height = 40 })
                                 .BuildLane(1, 0)
-                                .BuildProduct("4012391230", "Coca-Cola", 10, 5, 5)
-                                .BuildProduct("4012391212", "あおいおちゃ", 15, 5, 5)
+                                .BuildProduct("4902102112778", "午後の紅茶レモンティー/Afternoon tea lemon 500ml", 0.059, 0.059, 0.217, "https://operationmanagerstorage.blob.core.windows.net/skus/4909411084875_1685061792.jpg", 500, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112761", "午後の紅茶ミルクティー/Afternoon tea milk 500ml", 0.059, 0.059, 0.217, "https://operationmanagerstorage.blob.core.windows.net/skus/4909411084950_1685061819.jpg", 500, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112754", "紅茶花伝ロイヤルミルクティー/Kouchakaden Royal Milk 440ml", 0.069, 0.069, 0.174, "https://operationmanagerstorage.blob.core.windows.net/skus/4902102136716_1659397560.jpg", 440, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112747", "伊右衛門カフェジャスミンティーラテ/Cafe Jasmine Tea latte 500ml", 0.072, 0.072, 0.177, "https://operationmanagerstorage.blob.core.windows.net/skus/4901777381254_1659397560.jpg", 500, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112730", "ウェルチ１房分のぶどう/welch 1 bunch 470ml", 0.072, 0.072, 0.173, "https://operationmanagerstorage.blob.core.windows.net/skus/4901340064041_1659397560.jpg", 470, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112723", "トロピカーナ100%オレンジ/Tropicana 100%orange 330ml", 0.06, 0.06, 0.184, "https://operationmanagerstorage.blob.core.windows.net/skus/4909411073114_1659397561.jpg", 330, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112716", "サントリー天然水/Suntory Natural Water 2000ml", 0.091, 0.106, 0.311, "https://operationmanagerstorage.blob.core.windows.net/skus/4901777018686_1679809773.jpg", 2000, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112709", "エビアン/Evian750ml", 0.082, 0.082, 0.21, "https://operationmanagerstorage.blob.core.windows.net/skus/3068320116266_1659397561.jpg", 750, 1659397548, EnumProductShape.Bottle)
+                                .BuildProduct("4902102112693", "天然水きりっと果実オレンジ＆マンゴー/Dried fruit orange & mango Water600ml", 0.068, 0.068, 0.224, "https://operationmanagerstorage.blob.core.windows.net/skus/4901777375901_1678168618.jpg", 600, 1659397548, EnumProductShape.Bottle)
                                 .Build();
 
             var cabinetModel = _mapper.Map<ModelCabinet>(cabinetEntity);

@@ -79,6 +79,7 @@ namespace TxAssignmentServices.Services
 
         }
 
+
         public async Task<ServiceResponse> UpdateCabinet(Guid IdCabinet, ModelCabinet updatedCabinetModel)
         {
             try
@@ -112,11 +113,8 @@ namespace TxAssignmentServices.Services
                             }
                             else
                             {
-                                if (CanProductBeAddedToLane(updatedRow, updatedLane, updatedProduct))
-                                {
-                                    updatedLane.Products.Add(updatedProduct);
-                                }
-                                else
+                                // If the product is new, try to add it to an existing or new lane
+                                if (!TryAddProductToExistingOrNewLane(existingCabinet, updatedProduct))
                                 {
                                     return new ServiceResponse { Success = false, Message = $"No space in lane for new product {updatedProduct.JanCode}." };
                                 }
@@ -182,194 +180,49 @@ namespace TxAssignmentServices.Services
             targetLane?.Products.Add(product);
         }
 
-
-        private bool CanProductBeAddedToLane(ModelRow row, ModelLane lane, ModelProduct product)
+        private bool CanProductBeAddedToLane(ModelCabinet cabinet, ModelLane lane, ModelProduct product)
         {
-            double totalSpaceUsed = lane.Products.Sum(p => p.Width);
-            double availableSpace = row.Size.Width - totalSpaceUsed;
-            return availableSpace >= product.Width;
+            // Calculate the total width used by the products in the lane.
+            double totalWidthUsed = lane.Products.Sum(p => p.Width);
+            // The available width is the cabinet's width minus the used width.
+            double availableWidth = cabinet.Size.Width - totalWidthUsed;
+            // The product can be added if there's enough available width in the lane.
+            return availableWidth >= product.Width;
         }
 
-        //public async Task<ServiceResponse<ModelCabinet>> IncludeProductIntoCabinet(Guid cabinetId, ModelProduct newProduct, ModelCabinet cabinetParam = null)
-        //{
-        //    try
-        //    {
-        //        var cabinet = new ModelCabinet();
-        //        if (cabinetParam == null)
-        //        {
-        //            var cabinetResponse = await _repositoryCabinet.GetCabinetById(cabinetId);
-        //            if (!cabinetResponse.Success)
-        //            {
-        //                return new ServiceResponse<ModelCabinet> { Success = false, Message = "Cabinet not found." };
-        //            }
+        private bool TryAddProductToExistingOrNewLane(ModelCabinet cabinet, ModelProduct product)
+        {
+            foreach (var row in cabinet.Rows)
+            {
+                foreach (var lane in row.Lanes)
+                {
+                    if (CanProductBeAddedToLane(cabinet, lane, product))
+                    {
+                        lane.Products.Add(product);
+                        return true;
+                    }
+                }
 
-        //            cabinet = _mapper.Map<ModelCabinet>(cabinetResponse.Data);
+                // No space in existing lanes, try to add a new lane if the total lanes' width does not exceed the cabinet width
+                double totalLanesWidth = row.Lanes.Sum(l => l.Width);
+                if (cabinet.Size.Width - totalLanesWidth >= product.Width)
+                {
+                    // The depth of the product must also not exceed the cabinet's depth
+                    if (product.Depth <= cabinet.Size.Depth)
+                    {
+                        row.Lanes.Add(new ModelLane
+                        {
+                            Products = new List<ModelProduct> { product }
+                        });
+                        return true;
+                    }
+                }
+            }
 
-        //        }
-        //        else
-        //        {
-        //            cabinet = cabinetParam;
-        //        }
+            // No space found or could not add a new lane within the cabinet's constraints
+            return false;
+        }
 
-        //        // First, try to find a row with the same product type (JanCode)
-        //        var rowWithSameProduct = FindRowWithSameProductType(cabinet, newProduct.JanCode);
-        //        if (rowWithSameProduct != null)
-        //        {
-        //            var (lane, positionX) = FindSpaceInLaneForProduct(rowWithSameProduct, newProduct);
-        //            if (lane != null && positionX.HasValue)
-        //            {
-        //                // Update cabinet and return response
-        //                // Find and update the lane in the cabinet
-        //                foreach (var row in cabinet.Rows)
-        //                {
-        //                    var targetLane = row.Lanes.FirstOrDefault(l => l.Id == lane.Id);
-        //                    if (targetLane != null)
-        //                    {
-        //                        targetLane.Products.Add(newProduct);
-        //                        break; // Break if the correct lane is found and updated
-        //                    }
-        //                }
-
-        //                // Update the entire cabinet in the repository
-        //                var result = await _repositoryCabinet.UpdateCabinet(cabinet.Id, _mapper.Map<Cabinet>(cabinet));
-        //                if (result.Success)
-        //                    return new ServiceResponse<ModelCabinet> { Success = true, Message = "Cabinet updated successfully." };
-        //                else
-        //                    return new ServiceResponse<ModelCabinet> { Success = false, Message = "Failed to update cabinet." };
-        //            }
-        //        }
-
-        //        // If no suitable row is found or no space in the lane, find a new suitable row
-        //        var newRow = FindNewRowForProduct(cabinet, newProduct);
-        //        if (newRow != null)
-        //        {
-        //            var (newLane, newPositionX) = FindSpaceInLaneForProduct(newRow, newProduct);
-        //            if (newLane != null && newPositionX.HasValue)
-        //            {
-        //                // Add the new product to the identified lane
-        //                newLane.Products.Add(newProduct);
-
-        //                // Now, find and update this lane in the cabinet model
-        //                foreach (var row in cabinet.Rows)
-        //                {
-        //                    var targetLane = row.Lanes.FirstOrDefault(l => l.Id == newLane.Id);
-        //                    if (targetLane != null)
-        //                    {
-        //                        targetLane.Products = newLane.Products;
-        //                        break;
-        //                    }
-        //                }
-
-        //                // Save the updated cabinet to the repository
-        //                var result = await _repositoryCabinet.UpdateCabinet(cabinet.Id, _mapper.Map<Cabinet>(cabinet));
-        //                if (result.Success)
-        //                    return new ServiceResponse<ModelCabinet> { Success = true, Message = "Cabinet updated successfully." };
-        //                else
-        //                    return new ServiceResponse<ModelCabinet> { Success = false, Message = "Failed to update cabinet." };
-        //            }
-        //        }
-
-        //        return new ServiceResponse<ModelCabinet> { Success = false, Message = "No empty space found in any lane." };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error occurred when looking for empty space.");
-        //        return new ServiceResponse<ModelCabinet> { Success = false, Message = ex.Message };
-        //    }
-        //}
-
-        //private ModelRow FindRowWithSameProductType(ModelCabinet cabinet, string janCode)
-        //{
-        //    foreach (var row in cabinet.Rows)
-        //    {
-        //        foreach (var lane in row.Lanes)
-        //        {
-        //            if (lane.Products.Any(product => product.JanCode == janCode))
-        //            {
-        //                return row;
-        //            }
-        //        }
-        //    }
-        //    return null;
-        //}
-
-        //private ModelRow FindNewRowForProduct(ModelCabinet cabinet, ModelProduct product)
-        //{
-        //    // Assuming we prefer to place the product in the lowest empty row that can accommodate its height
-        //    foreach (var row in cabinet.Rows.OrderBy(r => r.PositionZ))
-        //    {
-        //        bool isRowEmptyOrHasSpace = !row.Lanes.Any() || row.Lanes.Any(lane => lane.Products.Sum(p => p.Width) < row.Size.Width);
-        //        if (row.Size.Height >= product.Height && isRowEmptyOrHasSpace)
-        //        {
-        //            return row;
-        //        }
-        //    }
-        //    return null; // Return null if no suitable row is found
-        //}
-
-        //private (ModelLane? lane, double? positionX) FindSpaceInLaneForProduct(ModelRow row, ModelProduct newProduct)
-        //{
-        //    foreach (var lane in row.Lanes)
-        //    {
-        //        double currentPositionX = lane.PositionX;
-        //        double laneEndPositionX = lane.PositionX + row.Size.Width;
-
-        //        // If lane is empty, place the product at the start of the lane
-        //        if (!lane.Products.Any())
-        //        {
-        //            return (lane, currentPositionX);
-        //        }
-
-        //        // Check for space within the current lane
-        //        double availableSpace = CalculateAvailableSpaceInLane(lane, laneEndPositionX);
-        //        if (availableSpace >= newProduct.Width)
-        //        {
-        //            double positionToPlaceProduct = FindPositionToPlaceProduct(lane, newProduct.Width);
-        //            if (positionToPlaceProduct >= 0)
-        //            {
-        //                return (lane, positionToPlaceProduct);
-        //            }
-        //        }
-        //    }
-
-        //    // Check adjacent lanes if no space is found in the current lane
-        //    foreach (var adjacentLane in row.Lanes)
-        //    {
-        //        double availableSpace = CalculateAvailableSpaceInLane(adjacentLane, row.Size.Width + adjacentLane.PositionX);
-        //        if (availableSpace >= newProduct.Width)
-        //        {
-        //            double positionToPlaceProduct = FindPositionToPlaceProduct(adjacentLane, newProduct.Width);
-        //            if (positionToPlaceProduct >= 0)
-        //            {
-        //                return (adjacentLane, positionToPlaceProduct);
-        //            }
-        //        }
-        //    }
-
-        //    return (null, null);
-        //}
-
-        //private double CalculateAvailableSpaceInLane(ModelLane lane, double laneEndPositionX)
-        //{
-        //    double totalUsedSpace = lane.Products.Sum(p => p.Width);
-        //    return laneEndPositionX - totalUsedSpace;
-        //}
-
-        //private double FindPositionToPlaceProduct(ModelLane lane, double productWidth)
-        //{
-        //    double currentPositionX = lane.PositionX;
-        //    foreach (var product in lane.Products.OrderBy(p => p.Width))
-        //    {
-        //        double spaceAfterCurrentProduct = currentPositionX + product.Width;
-        //        if (spaceAfterCurrentProduct >= productWidth)
-        //        {
-        //            return currentPositionX;
-        //        }
-        //        currentPositionX += product.Width;
-        //    }
-
-        //    return -1;
-        //}
 
     }
 }
