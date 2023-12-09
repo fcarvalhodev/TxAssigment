@@ -40,7 +40,6 @@ namespace TxAssigmentUnitTests.Mocks
                 {
                     Number = laneNumber,
                     Products = new List<Product>(),
-                    PositionX = positionX
                 };
                 lastRow.Lanes.Add(lane);
             }

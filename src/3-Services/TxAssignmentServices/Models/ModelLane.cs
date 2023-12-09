@@ -1,10 +1,9 @@
 ﻿namespace TxAssignmentServices.Models
 {
-    public class ModelLane
+    public class ModelLane : ModelBase
     {
         public int Number { get; set; }
         public List<ModelProduct> Products { get; set; }
-        public int PositionX { get; set; }
 
         public ModelLane()
         {

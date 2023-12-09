@@ -66,7 +66,7 @@ namespace TxAssignmentInfra.Repositories
             }
         }
 
-        public async Task<RepositoryResponse> UpadteCabinet(Guid IdCabinet, Cabinet cabinet)
+        public async Task<RepositoryResponse> UpdateCabinet(Guid IdCabinet, Cabinet cabinet)
         {
             try
             {

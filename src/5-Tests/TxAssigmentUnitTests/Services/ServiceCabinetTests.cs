@@ -111,40 +111,29 @@ namespace TxAssigmentUnitTests.Services
         {
             // Arrange
             var cabinetId = Guid.NewGuid();
-            var cabinetModel = new ModelCabinet { /* Initialize properties */ };
-            var cabinetEntity = new Cabinet { /* Initialize properties */ };
+            var cabinetEntity = new MockBuilderCabinet()
+                                .BuildRow(1, 50, new Size { Height = 40 })
+                                .BuildLane(1, 0)
+                                .BuildProduct("4012391230", "Coca-Cola", 10, 5, 5)
+                                .BuildProduct("4012391212", "あおいおちゃ", 15, 5, 5)
+                                .Build();
+
+            var cabinetModel = _mapper.Map<ModelCabinet>(cabinetEntity);
+
+            _mockMapper.Setup(m => m.Map<ModelCabinet>(It.IsAny<Cabinet>())).Returns(cabinetModel);
+            _mockRepo.Setup(r => r.GetCabinetById(cabinetId))
+                     .ReturnsAsync(new RepositoryResponse<Cabinet> { Success = true, Data = cabinetEntity });
 
             _mockMapper.Setup(m => m.Map<Cabinet>(cabinetModel)).Returns(cabinetEntity);
-            _mockRepo.Setup(r => r.UpadteCabinet(cabinetId, cabinetEntity)).ReturnsAsync(new RepositoryResponse { Success = true });
+            _mockRepo.Setup(r => r.UpdateCabinet(cabinetId, cabinetEntity)).ReturnsAsync(new RepositoryResponse { Success = true });
 
             // Act
-            var result = await _service.UpadteCabinet(cabinetId, cabinetModel);
+            var result = await _service.UpdateCabinet(cabinetId, cabinetModel);
 
             // Assert
             Assert.IsTrue(result.Success);
             Assert.AreEqual("Cabinet updated successfully.", result.Message);
         }
-
-        [TestMethod]
-        public async Task GetEmptySpaceOnCabinet_ShouldReturnSuccess_WhenEmptySpaceIsFound()
-        {
-            // Arrange
-            var cabinetId = Guid.NewGuid();
-            var newProduct = new ModelProduct { /* Initialize properties */ };
-            var cabinetEntity = new Cabinet { /* Initialize properties */ };
-            var cabinetModel = new ModelCabinet { /* Initialize properties */ };
-
-            _mockRepo.Setup(r => r.GetCabinetById(cabinetId)).ReturnsAsync(new RepositoryResponse<Cabinet> { Success = true, Data = cabinetEntity });
-            _mockMapper.Setup(m => m.Map<ModelCabinet>(cabinetEntity)).Returns(cabinetModel);
-            // Add more setup to mock the behavior of FindRowForProduct and FindSpaceInLaneForProduct
-
-            // Act
-            var result = await _service.GetEmptySpaceOnCabinet(cabinetId, newProduct);
-
-            // Assert
-            // Add assertions based on the expected outcome of GetEmptySpaceOnCabinet
-        }
-
 
     }
 }

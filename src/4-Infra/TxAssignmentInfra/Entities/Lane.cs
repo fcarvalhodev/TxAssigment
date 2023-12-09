@@ -1,10 +1,9 @@
 ﻿namespace TxAssignmentInfra.Entities
 {
-    public class Lane
+    public class Lane : BaseEntity
     {
         public int Number { get; set; }
         public List<Product> Products { get; set; }
-        public int PositionX { get; set; }
 
         public Lane()
         {
