@@ -137,10 +137,6 @@ namespace TxAssignmentServices.Services
             }
         }
 
-        // Additional helper methods (assuming they are properly implemented)
-
-
-
         private ModelProduct FindProductByJanCode(ModelCabinet cabinet, string janCode)
         {
             foreach (var row in cabinet.Rows)
