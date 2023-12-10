@@ -1,5 +1,4 @@
 using AutoMapper;
-using StackExchange.Redis;
 using TxAssigmentApi.Middlewares;
 using TxAssignmentInfra.Connectors;
 using TxAssignmentServices.Profiles;
@@ -13,7 +12,7 @@ namespace TxAssigmentApi
             var builder = WebApplication.CreateBuilder(args);
 
             // Register Redis Database
-            builder.Services.AddSingleton<IDatabase>(provider =>
+            builder.Services.AddSingleton(provider =>
             {
                 return RedisConnectorHelper.Connection.GetDatabase();
             });
@@ -21,11 +20,14 @@ namespace TxAssigmentApi
             // Register Services and Repositories
             builder.AddServiceProduct();
             builder.AddServiceCabinet();
+            builder.AddServiceUser();
 
             // Add AutoMapper
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new ProfileCabinet());
+                mc.AddProfile(new ProfileProduct());
+                mc.AddProfile(new ProfileUser());
             });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);

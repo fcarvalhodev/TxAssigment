@@ -29,9 +29,11 @@ namespace TxAssigmentUnitTests.Services
             _database = RedisConnectorHelper.Connection.GetDatabase();
             _repositoryProduct = new RepositoryProduct(_database);
 
-            var mapperConfiguration = new MapperConfiguration(cfg =>
+            var mapperConfiguration = new MapperConfiguration(mc =>
             {
-                cfg.AddProfile<ProfileProduct>();
+                mc.AddProfile(new ProfileCabinet());
+                mc.AddProfile(new ProfileProduct());
+                mc.AddProfile(new ProfileUser());
             });
             _mapper = mapperConfiguration.CreateMapper();
             _mockLogger = new Mock<ILogger<ServiceProduct>>();

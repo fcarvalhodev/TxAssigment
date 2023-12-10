@@ -117,7 +117,7 @@ namespace TxAssignmentInfra.Repositories
 
                 foreach (var keyVal in productKeys)
                 {
-                    string key = keyVal.ToString(); // The key already includes the RedisDocTypes.SKU prefix
+                    string key = keyVal.ToString();
                     var serializedProduct = await _database.StringGetAsync(key);
                     if (!serializedProduct.IsNullOrEmpty)
                     {

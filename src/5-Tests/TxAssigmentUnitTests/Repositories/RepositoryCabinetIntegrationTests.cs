@@ -22,9 +22,11 @@ namespace TxAssigmentUnitTests.Repositories
             _database = RedisConnectorHelper.Connection.GetDatabase();
             _repository = new RepositoryCabinet(_database);
 
-            var mapperConfiguration = new MapperConfiguration(cfg =>
+            var mapperConfiguration = new MapperConfiguration(mc =>
             {
-                cfg.AddProfile<ProfileCabinet>();
+                mc.AddProfile(new ProfileCabinet());
+                mc.AddProfile(new ProfileProduct());
+                mc.AddProfile(new ProfileUser());
             });
 
             _cabinet = new MockBuilderCabinet()

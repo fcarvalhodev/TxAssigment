@@ -3,6 +3,7 @@
     public enum RedisDocTypes
     {
         CAB,
-        SKU
+        SKU,
+        USER
     }
 }

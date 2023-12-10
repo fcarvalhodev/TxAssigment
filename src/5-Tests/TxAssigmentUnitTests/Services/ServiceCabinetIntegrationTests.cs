@@ -39,9 +39,11 @@ namespace TxAssigmentUnitTests.Services
             _repositoryCabinet = new RepositoryCabinet(_database);
             _repositoryProduct = new RepositoryProduct(_database);
 
-            var mapperConfiguration = new MapperConfiguration(cfg =>
+            var mapperConfiguration = new MapperConfiguration(mc =>
             {
-                cfg.AddProfile<ProfileCabinet>();
+                mc.AddProfile(new ProfileCabinet());
+                mc.AddProfile(new ProfileProduct());
+                mc.AddProfile(new ProfileUser());
             });
             _mapper = mapperConfiguration.CreateMapper();
             _mockLogger = new Mock<ILogger<ServiceCabinet>>();
