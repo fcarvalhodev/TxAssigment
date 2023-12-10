@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using StackExchange.Redis;
 using TxAssignmentInfra.Entities;
+using TxAssignmentInfra.Entities.Enumerators;
 
 namespace TxAssignmentInfra.Repositories
 {
@@ -18,8 +19,15 @@ namespace TxAssignmentInfra.Repositories
         {
             try
             {
+                string key = $"{RedisDocTypes.CAB}{cabinet.Id}";
+                var existingProduct = await GetCabinetById(cabinet.Id);
+                if (existingProduct.Data != null)
+                    return new RepositoryResponse { Success = false, Message = "The cabinet already exists on the database" };
+
+
                 var serializedProduct = JsonConvert.SerializeObject(cabinet);
-                await _database.StringSetAsync(cabinet.Id.ToString(), serializedProduct);
+                await _database.StringSetAsync(key, serializedProduct);
+                await _database.SetAddAsync("cabinetKeys", key);
                 return new RepositoryResponse { Success = true, Message = "Cabinet created successfully." };
             }
             catch (Exception ex)
@@ -32,7 +40,9 @@ namespace TxAssignmentInfra.Repositories
         {
             try
             {
-                bool deleted = await _database.KeyDeleteAsync(IdCabinet.ToString());
+                string key = $"{RedisDocTypes.CAB}{IdCabinet}";
+                bool deleted = await _database.KeyDeleteAsync(key);
+                await _database.SetRemoveAsync("cabinetKeys", key);
                 return new RepositoryResponse
                 {
                     Success = deleted,
@@ -49,7 +59,8 @@ namespace TxAssignmentInfra.Repositories
         {
             try
             {
-                var serializedCabinet = await _database.StringGetAsync(IdCabinet.ToString());
+                string key = $"{RedisDocTypes.CAB}{IdCabinet}";
+                var serializedCabinet = await _database.StringGetAsync(key);
 
                 if (serializedCabinet.IsNullOrEmpty)
                 {
@@ -70,7 +81,7 @@ namespace TxAssignmentInfra.Repositories
         {
             try
             {
-                var key = IdCabinet.ToString();
+                string key = $"{RedisDocTypes.CAB}{IdCabinet}";
                 if (!await _database.KeyExistsAsync(key))
                 {
                     return new RepositoryResponse { Success = false, Message = "Cabinet not found." };

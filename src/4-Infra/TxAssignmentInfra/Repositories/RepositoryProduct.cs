@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using StackExchange.Redis;
+using System.Numerics;
 using TxAssignmentInfra.Entities;
+using TxAssignmentInfra.Entities.Enumerators;
 
 namespace TxAssignmentInfra.Repositories
 {
@@ -18,7 +20,8 @@ namespace TxAssignmentInfra.Repositories
         {
             try
             {
-                var serializedProduct = await _database.StringGetAsync(IdProduct.ToString());
+                string key = $"{RedisDocTypes.SKU}{IdProduct}";
+                var serializedProduct = await _database.StringGetAsync(key);
 
                 if (serializedProduct.IsNullOrEmpty)
                 {
@@ -39,13 +42,18 @@ namespace TxAssignmentInfra.Repositories
         {
             try
             {
-                var existingProduct = await GetProductByJanCode(product.JanCode);
-                if (existingProduct != null)
-                    return new RepositoryResponse { Success = false, Message = "The product already exists on the database" };
+                string key = $"{RedisDocTypes.SKU}{product.Id}";
 
+                var products = await GetAllProducts();
+                if (!products.Success)
+                    return new RepositoryResponse { Success = false, Message = "The request was not able to fetch the products" };
+
+                if (products.Data.Where(me => me.JanCode.Equals(product.JanCode)).Count() >= 1)
+                    return new RepositoryResponse { Success = false, Message = $"The product with JanCode {product.JanCode} already exists in the database." };
 
                 var serializedProduct = JsonConvert.SerializeObject(product);
-                await _database.StringSetAsync(product.Id.ToString(), serializedProduct);
+                await _database.StringSetAsync(key, serializedProduct);
+                await _database.SetAddAsync("productKeys", key);
                 return new RepositoryResponse { Success = true, Message = "Product created successfully." };
             }
             catch (Exception ex)
@@ -58,7 +66,7 @@ namespace TxAssignmentInfra.Repositories
         {
             try
             {
-                var key = IdProduct.ToString();
+                var key = $"{RedisDocTypes.SKU}{IdProduct}";
                 if (!await _database.KeyExistsAsync(key))
                 {
                     return new RepositoryResponse { Success = false, Message = "Product not found." };
@@ -82,7 +90,9 @@ namespace TxAssignmentInfra.Repositories
         {
             try
             {
-                bool deleted = await _database.KeyDeleteAsync(IdProduct.ToString());
+                var key = $"{RedisDocTypes.SKU}{IdProduct}";
+                bool deleted = await _database.KeyDeleteAsync(key);
+                await _database.SetRemoveAsync("productKeys", key);
                 return new RepositoryResponse
                 {
                     Success = deleted,
@@ -95,25 +105,31 @@ namespace TxAssignmentInfra.Repositories
             }
         }
 
-        public async Task<RepositoryResponse<Product>> GetProductByJanCode(string janCode)
+        public async Task<RepositoryResponse<List<Product>>> GetAllProducts()
         {
             try
             {
-                var serializedProduct = await _database.StringGetAsync(janCode);
+                var productKeys = await _database.SetMembersAsync("productKeys");
+                var products = new List<Product>();
 
-                if (serializedProduct.IsNullOrEmpty)
+                foreach (var keyVal in productKeys)
                 {
-                    return new RepositoryResponse<Product> { Success = false, Message = "Product not found." };
-
+                    string key = keyVal.ToString(); // The key already includes the RedisDocTypes.SKU prefix
+                    var serializedProduct = await _database.StringGetAsync(key);
+                    if (!serializedProduct.IsNullOrEmpty)
+                    {
+                        var product = JsonConvert.DeserializeObject<Product>(serializedProduct);
+                        products.Add(product);
+                    }
                 }
 
-                var product = JsonConvert.DeserializeObject<Product>(serializedProduct);
-                return new RepositoryResponse<Product> { Success = true, Data = product };
+                return new RepositoryResponse<List<Product>> { Success = true, Data = products };
             }
             catch (Exception ex)
             {
-                return new RepositoryResponse<Product> { Success = false, Message = ex.Message };
+                return new RepositoryResponse<List<Product>> { Success = false, Message = ex.Message };
             }
         }
+
     }
 }

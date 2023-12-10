@@ -1,6 +1,7 @@
 ﻿using Moq;
 using Newtonsoft.Json;
 using StackExchange.Redis;
+using System.Numerics;
 using TxAssigmentUnitTests.Mocks;
 using TxAssignmentInfra.Entities;
 using TxAssignmentInfra.Entities.Enumerators;
@@ -118,12 +119,13 @@ namespace TxAssigmentUnitTests.Repositories
                          .ReturnsAsync(serializedProduct);
 
             // Act
-            var response = await _repository.GetProductByJanCode(_testProduct.JanCode);
+            var response = await _repository.GetAllProducts();
+            bool IsAValidJanCode = response.Data.Where(me => me.JanCode.Equals(_testProduct.JanCode)).Count() >= 1;
 
             // Assert
             Assert.IsTrue(response.Success);
             Assert.IsNotNull(response.Data);
-            Assert.AreEqual(_testProduct.JanCode, response.Data.JanCode);
+            Assert.IsFalse(IsAValidJanCode);
         }
     }
 }

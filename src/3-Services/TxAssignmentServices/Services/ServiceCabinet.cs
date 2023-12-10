@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
+using System.Numerics;
 using TxAssignmentInfra.Entities;
 using TxAssignmentInfra.Repositories;
 using TxAssignmentServices.Models;
@@ -42,7 +43,7 @@ namespace TxAssignmentServices.Services
                         return new ServiceResponse { Success = false, Message = validateLane.errorMessage };
 
                     //Validate Products
-                    var validationResult = ValidateLaneProducts(row.Lanes, new HashSet<string>());
+                    var validationResult = ValidateLaneProducts(row.Lanes);
                     if (!validationResult.Success)
                     {
                         return validationResult;
@@ -83,7 +84,7 @@ namespace TxAssignmentServices.Services
                         return new ServiceResponse { Success = false, Message = validateLane.errorMessage };
 
                     //Validate Products
-                    var validationResult = ValidateLaneProducts(row.Lanes, new HashSet<string>());
+                    var validationResult = ValidateLaneProducts(row.Lanes);
                     if (!validationResult.Success)
                     {
                         return validationResult;
@@ -141,21 +142,21 @@ namespace TxAssignmentServices.Services
 
         #region .: Validations :.
 
-        private ServiceResponse ValidateLaneProducts(IEnumerable<ModelLane> lanes, HashSet<string> seenJanCodes)
+        private ServiceResponse ValidateLaneProducts(IEnumerable<ModelLane> lanes)
         {
+            var productResponse = _repositoryProduct.GetAllProducts().Result;
+            if (!productResponse.Success)
+                return new ServiceResponse { Success = false, Message = $"Not able to fetch the produts" };
+
+
             foreach (var lane in lanes)
             {
-                var productResponse = _repositoryProduct.GetProductByJanCode(lane.JanCode);
-                if (productResponse == null)
+                if (productResponse.Data.Where(me => me.JanCode.Equals(lane.JanCode)).Count() >= 1)
                 {
                     return new ServiceResponse { Success = false, Message = $"The product with JanCode {lane.JanCode} was not found in the database, you must register the product first." };
                 }
-
-                if (!seenJanCodes.Add(lane.JanCode))
-                {
-                    return new ServiceResponse { Success = false, Message = $"The product with JanCode {lane.JanCode} is duplicated, please remove from one of the lanes." };
-                }
             }
+
             return new ServiceResponse { Success = true };
         }
 
@@ -172,7 +173,7 @@ namespace TxAssignmentServices.Services
             for (int i = 0; i < orderedLanes.Count; i++)
             {
                 int laneWidth;
-                if (i == orderedLanes.Count - 1) 
+                if (i == orderedLanes.Count - 1)
                 {
                     laneWidth = cabinetWidth - orderedLanes[i].PositionX;
                 }

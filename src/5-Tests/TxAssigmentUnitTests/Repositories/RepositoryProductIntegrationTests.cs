@@ -74,7 +74,7 @@ namespace TxAssigmentUnitTests.Repositories
 
             // Assert
             Assert.IsFalse(createResponse.Success);
-            Assert.AreEqual("The product already exists on the database", createResponse.Message);
+            Assert.AreEqual($"The product with JanCode {duplicateProduct.JanCode} already exists in the database.", createResponse.Message);
 
             // Cleanup
             await _repository.DeleteProduct(existingProduct.Id);
