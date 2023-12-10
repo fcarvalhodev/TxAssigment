@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using TxAssignmentInfra.Entities;
 using TxAssignmentInfra.Repositories;
 using TxAssignmentServices.Models;
+using TxAssignmentServices.Strategies.Products;
 
 namespace TxAssignmentServices.Services
 {
@@ -12,25 +12,28 @@ namespace TxAssignmentServices.Services
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public ServiceProduct(IRepositoryProduct repositoryProduct, IMapper mapper, ILogger<ServiceProduct> logger)
+        private readonly IStrategyCreateProductOperation _strategyCreateProductOperation;
+        private readonly IStrategyUpdateProductOperation _strategyUpdateProductOperation;
+        private readonly IStrategyDeleteProductOperation _strategyDeleteProductOperation;
+
+        public ServiceProduct(IRepositoryProduct repositoryProduct, IMapper mapper, ILogger<ServiceProduct> logger, 
+            IStrategyCreateProductOperation strategyCreateProductOperation,
+            IStrategyUpdateProductOperation strategyUpdateProductOperation,
+            IStrategyDeleteProductOperation strategyDeleteProductOperation)
         {
             _mapper = mapper;
             _logger = logger;
             _repositoryProduct = repositoryProduct;
+            _strategyCreateProductOperation = strategyCreateProductOperation;
+            _strategyUpdateProductOperation = strategyUpdateProductOperation;
+            _strategyDeleteProductOperation = strategyDeleteProductOperation;
         }
 
         public async Task<ServiceResponse> CreateProduct(ModelProduct modelProduct)
         {
             try
             {
-                var product = _mapper.Map<Product>(modelProduct);
-                var response = await _repositoryProduct.CreateProduct(product);
-
-                return new ServiceResponse
-                {
-                    Success = response.Success,
-                    Message = response.Message
-                };
+                return await _strategyCreateProductOperation.ExecuteAsync(modelProduct);
             }
             catch (Exception ex)
             {
@@ -39,16 +42,24 @@ namespace TxAssignmentServices.Services
             }
         }
 
+        public async Task<ServiceResponse> UpdateProduct(string janCode, ModelProduct modelProduct)
+        {
+            try
+            {
+                return await _strategyUpdateProductOperation.ExecuteAsync(janCode, modelProduct);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating product.");
+                return new ServiceResponse { Success = false, Message = ex.Message };
+            }
+        }
+
         public async Task<ServiceResponse> DeleteProduct(string janCode)
         {
             try
             {
-                var response = await _repositoryProduct.DeleteProduct(janCode);
-                return new ServiceResponse
-                {
-                    Success = response.Success,
-                    Message = response.Message
-                };
+                return await _strategyDeleteProductOperation.ExecuteAsync(janCode);
             }
             catch (Exception ex)
             {
@@ -102,26 +113,6 @@ namespace TxAssignmentServices.Services
             {
                 _logger.LogError(ex, "Error occurred while retrieving product.");
                 return new ServiceResponse<ModelProduct> { Success = false, Message = ex.Message };
-            }
-        }
-
-        public async Task<ServiceResponse> UpdateProduct(string janCode, ModelProduct modelProduct)
-        {
-            try
-            {
-                var product = _mapper.Map<Product>(modelProduct);
-                var response = await _repositoryProduct.UpdateProduct(janCode, product);
-
-                return new ServiceResponse
-                {
-                    Success = response.Success,
-                    Message = response.Message
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while updating product.");
-                return new ServiceResponse { Success = false, Message = ex.Message };
             }
         }
     }

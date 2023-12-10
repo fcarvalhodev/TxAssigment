@@ -87,14 +87,14 @@ namespace TxAssignmentServices.Strategies.Cabinets
             if (cabinet.Position.Z < 0)
                 return (false, "The position Z can not be negative");
 
-            if (cabinet.Size.Width <= 0)
-                return (false, "The width of the cabinet must be bigger than 0");
+            if (cabinet.Size.Width < 0)
+                return (false, "The position Width can not be negative");
 
-            if (cabinet.Size.Height <= 0)
-                return (false, "The heigth of the cabinet must be bigger than 0");
+            if (cabinet.Size.Height < 0)
+                return (false, "The position Height can not be negative");
 
-            if (cabinet.Size.Depth <= 0)
-                return (false, "The depth of the cabinet must be bigger than 0");
+            if (cabinet.Size.Depth < 0)
+                return (false, "The position Depth can not be negative");
 
             return (true, "");
         }

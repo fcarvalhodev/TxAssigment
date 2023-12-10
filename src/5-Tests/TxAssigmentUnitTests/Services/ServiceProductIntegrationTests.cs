@@ -9,6 +9,7 @@ using TxAssignmentServices.Models;
 using TxAssignmentServices.Profiles;
 using TxAssignmentServices.Services;
 using TxAssignmentInfra.Entities;
+using TxAssignmentServices.Strategies.Products;
 
 namespace TxAssigmentUnitTests.Services
 {
@@ -34,10 +35,17 @@ namespace TxAssigmentUnitTests.Services
             });
             _mapper = mapperConfiguration.CreateMapper();
             _mockLogger = new Mock<ILogger<ServiceProduct>>();
-            _serviceProduct = new ServiceProduct(_repositoryProduct, _mapper, _mockLogger.Object);
+
+            // Instantiate strategies
+            var createProductStrategy = new StrategyCreateProductOperation(_repositoryProduct, _mapper, _mockLogger.Object);
+            var updateProductStrategy = new StrategyUpdateProductOperation(_repositoryProduct, _mapper, _mockLogger.Object);
+            var deleteProductStrategy = new StrategyDeleteProductOperation(_repositoryProduct, _mockLogger.Object);
+
+            _serviceProduct = new ServiceProduct(_repositoryProduct, _mapper, _mockLogger.Object, createProductStrategy, updateProductStrategy, deleteProductStrategy);
 
             _product = new MockBuilderProduct()
-                            .WithJanCode("1238172783910921")
+                            .WithName("Black sugar -free 185g")
+                            .WithJanCode("4902102112976")
                             .WithDimensions(0.097, 0.308, 0.097)
                             .WithSize(1500)
                             .WithImageUrl("https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg")
@@ -67,6 +75,7 @@ namespace TxAssigmentUnitTests.Services
             Assert.IsTrue(responseCreate.Success);
 
             var updatedProduct = new MockBuilderProduct()
+                                    .WithName("Black sugar -free 185g")
                                     .WithJanCode(_product.JanCode)
                                     .WithDimensions(0.200, 0.318, 0.099)
                                     .WithSize(1550)
