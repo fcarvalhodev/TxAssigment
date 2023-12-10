@@ -1,4 +1,6 @@
-﻿using TxAssignmentServices.Models;
+﻿using TxAssignmentInfra.Entities;
+using TxAssignmentInfra.Repositories;
+using TxAssignmentServices.Models;
 
 namespace TxAssignmentServices.Services
 {
@@ -8,5 +10,6 @@ namespace TxAssignmentServices.Services
         Task<ServiceResponse> UpdateCabinet(Guid IdCabinet, ModelCabinet newCabinet);
         Task<ServiceResponse> DeleteCabinet(Guid IdCabinet);
         Task<ServiceResponse<ModelCabinet>> GetCabinetById(Guid IdCabinet);
+        Task<ServiceResponse<List<ModelCabinet>>> GetAllCabinets();
     }
 }

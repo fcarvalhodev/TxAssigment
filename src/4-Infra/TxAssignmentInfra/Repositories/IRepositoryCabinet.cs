@@ -8,5 +8,6 @@ namespace TxAssignmentInfra.Repositories
         Task<RepositoryResponse> UpdateCabinet(Guid IdCabinet, Cabinet cabinet);
         Task<RepositoryResponse> DeleteCabinet(Guid IdCabinet);
         Task<RepositoryResponse<Cabinet>> GetCabinetById(Guid IdCabinet);
+        Task<RepositoryResponse<List<Cabinet>>> GetAllCabinets();
     }
 }

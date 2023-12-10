@@ -139,7 +139,6 @@ namespace TxAssignmentServices.Services
 
         }
 
-
         #region .: Validations :.
 
         private ServiceResponse ValidateLaneProducts(IEnumerable<ModelLane> lanes)
@@ -147,6 +146,10 @@ namespace TxAssignmentServices.Services
             var productResponse = _repositoryProduct.GetAllProducts().Result;
             if (!productResponse.Success)
                 return new ServiceResponse { Success = false, Message = $"Not able to fetch the produts" };
+
+            if(productResponse.Data.Count <= 0)
+                return new ServiceResponse { Success = false, Message = $"There are no products on the database, please insert a product to continue" };
+
 
 
             foreach (var lane in lanes)
@@ -198,6 +201,32 @@ namespace TxAssignmentServices.Services
             return (true, string.Empty);
         }
         #endregion
+
+        public async Task<ServiceResponse<List<ModelCabinet>>> GetAllCabinets()
+        {
+            try
+            {
+                var response = await _repositoryCabinet.GetAllCabinets();
+
+                if (!response.Success)
+                {
+                    return new ServiceResponse<List<ModelCabinet>> { Success = false, Message = response.Message };
+                }
+
+                var modelCabinets = _mapper.Map<List<ModelCabinet>>(response.Data);
+                return new ServiceResponse<List<ModelCabinet>>
+                {
+                    Success = true,
+                    Data = modelCabinets
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving all cabinets.");
+                return new ServiceResponse<List<ModelCabinet>> { Success = false, Message = ex.Message };
+            }
+ 
+        }
     }
 }
 

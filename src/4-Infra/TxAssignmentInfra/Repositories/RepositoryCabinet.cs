@@ -101,5 +101,31 @@ namespace TxAssignmentInfra.Repositories
                 return new RepositoryResponse { Success = false, Message = ex.Message };
             }
         }
+
+        public async Task<RepositoryResponse<List<Cabinet>>> GetAllCabinets()
+        {
+            try
+            {
+                var cabinetKeys = await _database.SetMembersAsync("cabinetKeys");
+                var cabinets = new List<Cabinet>();
+
+                foreach (var keyVal in cabinetKeys)
+                {
+                    string key = keyVal.ToString();
+                    var serializedCabinet = await _database.StringGetAsync(key);
+                    if (!serializedCabinet.IsNullOrEmpty)
+                    {
+                        var cabinet = JsonConvert.DeserializeObject<Cabinet>(serializedCabinet);
+                        cabinets.Add(cabinet);
+                    }
+                }
+
+                return new RepositoryResponse<List<Cabinet>> { Success = true, Data = cabinets };
+            }
+            catch (Exception ex)
+            {
+                return new RepositoryResponse<List<Cabinet>> { Success = false, Message = ex.Message };
+            }
+        }
     }
 }
