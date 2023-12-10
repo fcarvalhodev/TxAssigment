@@ -12,17 +12,11 @@ namespace TxAssignmentServices.Models
         public string? ImageUrl { get; set; }
         public int Size { get; set; }
         public long TimeStamp { get; set; }
-        public EnumProductShape Shape { get; set; }
+        public string Shape { get; set; }
 
         public ModelProduct()
         {
             
-        }
-
-        public ModelProduct(string janCode)
-        {
-            this.JanCode = janCode;
-            Shape = EnumProductShape.Unknown;
         }
     }
 }

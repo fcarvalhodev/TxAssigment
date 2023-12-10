@@ -28,6 +28,9 @@ namespace TxAssigmentUnitTests.Services
 
         private Cabinet _cabinet;
 
+        private Product _product3102;
+        private Product _product2594;
+
         [TestInitialize]
         public void Setup()
         {
@@ -63,12 +66,33 @@ namespace TxAssigmentUnitTests.Services
                                 .BuildLane(1, 5, "4902102113102", 20)
                                 .BuildLane(2, 10, "4902102112594", 13)
                                 .Build();
+
+            _product3102 = new MockBuilderProduct()
+                  .WithJanCode("4902102113102")
+                  .WithName("アクエリアス/Aquarius 950ml")
+                  .WithDimensions(0.097, 0.308, 0.097)
+                  .WithSize(1500)
+                  .WithImageUrl("https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg")
+                  .WithTimeStamp(1659397548)
+                  .WithShape("Bottle")
+                  .Build();
+
+            _product2594 = new MockBuilderProduct()
+                  .WithJanCode("4902102112594")
+                  .WithName("アクエリアス/Aquarius 950ml")
+                  .WithDimensions(0.097, 0.308, 0.097)
+                  .WithSize(1500)
+                  .WithImageUrl("https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg")
+                  .WithTimeStamp(1659397548)
+                  .WithShape("Bottle")
+                  .Build();
         }
 
         [TestMethod]
         public async Task CreateCabinet_WhenValid_ShouldCreateCabinet()
         {
             // Act
+            await InitializeProducts();
             var response = await _serviceCabinet.CreateCabinet(_mapper.Map<ModelCabinet>(_cabinet));
             var cabinetRegistered = await _repositoryCabinet.GetCabinetById(_cabinet.Id);
 
@@ -84,6 +108,7 @@ namespace TxAssigmentUnitTests.Services
         public async Task UpdateCabinet_WhenCabinetExists_ShouldUpdateCabinet()
         {
             // Arrange
+            await InitializeProducts();
             var createCabinetReponse = await _serviceCabinet.CreateCabinet(_mapper.Map<ModelCabinet>(_cabinet));
             Assert.IsTrue(createCabinetReponse.Success);
             var newCabinetModel = new MockBuilderCabinet()
@@ -114,6 +139,7 @@ namespace TxAssigmentUnitTests.Services
         public async Task DeleteCabinet_WhenCabinetExists_ShouldDeleteCabinet()
         {
             //Arrange
+            await InitializeProducts();
             var createCabinetReponse = await _serviceCabinet.CreateCabinet(_mapper.Map<ModelCabinet>(_cabinet));
             Assert.IsTrue(createCabinetReponse.Success);
 
@@ -130,7 +156,8 @@ namespace TxAssigmentUnitTests.Services
         [TestMethod]
         public async Task GetCabinetById_WhenCabinetExists_ShouldReturnCabinet()
         {
-            // Arrange: Assuming a cabinet exists in the database
+            // Arrange
+            await InitializeProducts();
             var createCabinetReponse = await _serviceCabinet.CreateCabinet(_mapper.Map<ModelCabinet>(_cabinet));
             Assert.IsTrue(createCabinetReponse.Success);
 
@@ -143,6 +170,38 @@ namespace TxAssigmentUnitTests.Services
 
             //Clean
             await _repositoryCabinet.DeleteCabinet(_cabinet.Id);
+        }
+
+        private async Task InitializeProducts()
+        {
+            var product3102 = await _repositoryProduct.GetProductByJanCode(_product3102.JanCode);
+            var product2594 = await _repositoryProduct.GetProductByJanCode(_product3102.JanCode);
+
+            if (product3102.Data == null)
+                await _repositoryProduct.CreateProduct(_product3102);
+
+            if (product2594.Data == null)
+                await _repositoryProduct.CreateProduct(_product2594);
+        }
+
+
+        [TestCleanup]
+        public async Task Cleanup()
+        {
+            if (_cabinet != null && _cabinet.Id != Guid.Empty)
+            {
+                await _repositoryCabinet.DeleteCabinet(_cabinet.Id);
+            }
+
+            if (_product3102 != null)
+            {
+                await _repositoryProduct.DeleteProduct(_product3102.JanCode);
+            }
+
+            if (_product2594 != null)
+            {
+                await _repositoryProduct.DeleteProduct(_product2594.JanCode);
+            }
         }
     }
 }

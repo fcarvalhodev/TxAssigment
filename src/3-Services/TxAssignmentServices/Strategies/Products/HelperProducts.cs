@@ -39,6 +39,15 @@ namespace TxAssignmentServices.Strategies.Products
             if (!string.IsNullOrEmpty(product.ImageUrl) && !Uri.IsWellFormedUriString(product.ImageUrl, UriKind.Absolute))
                 return (false, "The ImageUrl of the product is not a valid URL.");
 
+            if (string.IsNullOrEmpty(product.Shape))
+                return (false, "The shape of the product cannot be empty.");
+
+            var allowedShapes = new List<string> { "bottle", "can" };
+            if (!allowedShapes.Contains(product.Shape.ToLower()))
+                return (false, "Invalid shape provided. Valid options are Bottle or Can.");
+
+
+
             return (true, "");
         }
 

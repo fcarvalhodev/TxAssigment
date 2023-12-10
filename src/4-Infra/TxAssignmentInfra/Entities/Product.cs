@@ -1,6 +1,4 @@
-﻿using TxAssignmentInfra.Entities.Enumerators;
-
-namespace TxAssignmentInfra.Entities
+﻿namespace TxAssignmentInfra.Entities
 {
     //Equivalent to SKU
     public class Product
@@ -13,11 +11,6 @@ namespace TxAssignmentInfra.Entities
         public string? ImageUrl { get; set; }
         public int Size { get; set; }
         public long TimeStamp { get; set; }
-        public EnumProductShape Shape { get; set; }
-
-        public Product()
-        {
-            Shape = EnumProductShape.Unknown; // Initialize with default Unknown value
-        }
+        public string Shape { get; set; }
     }
 }

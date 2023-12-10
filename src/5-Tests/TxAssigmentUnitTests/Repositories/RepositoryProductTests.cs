@@ -24,7 +24,8 @@ namespace TxAssigmentUnitTests.Repositories
             _repository = new RepositoryProduct(_mockDatabase.Object);
 
             _testProduct = new MockBuilderProduct()
-                            .WithJanCode("1238172783910921")
+                            .WithJanCode("4902102113133")
+                            .WithName("小岩井theカフェオレ/Koiwai THE Cafe au lait 500ml")
                             .WithDimensions(0.097, 0.308, 0.097)
                             .WithSize(1500)
                             .WithImageUrl("https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg")

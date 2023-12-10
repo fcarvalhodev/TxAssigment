@@ -10,7 +10,6 @@ using TxAssignmentServices.Profiles;
 using TxAssignmentServices.Services;
 using TxAssignmentInfra.Entities;
 using TxAssignmentServices.Strategies.Products;
-using TxAssignmentServices.Strategies.Cabinets;
 
 namespace TxAssigmentUnitTests.Services
 {
@@ -56,6 +55,7 @@ namespace TxAssigmentUnitTests.Services
                             .WithSize(1500)
                             .WithImageUrl("https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg")
                             .WithTimeStamp(1659397548)
+                            .WithShape("Bottle")
                             .Build();
         }
 
@@ -87,6 +87,7 @@ namespace TxAssigmentUnitTests.Services
                                     .WithSize(1550)
                                     .WithImageUrl("https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg")
                                     .WithTimeStamp(1659397548)
+                                    .WithShape("Bottle")
                                     .Build();
 
             // Act

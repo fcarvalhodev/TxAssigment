@@ -50,7 +50,7 @@ namespace TxAssigmentUnitTests.Mocks
             return this;
         }
 
-        public MockBuilderProduct WithShape(EnumProductShape shape)
+        public MockBuilderProduct WithShape(string shape)
         {
             _product.Shape = shape;
             return this;
