@@ -12,7 +12,7 @@ namespace TxAssignmentServices.Services
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public ServiceProduct(IRepositoryProduct repositoryProduct, IMapper mapper, ILogger logger)
+        public ServiceProduct(IRepositoryProduct repositoryProduct, IMapper mapper, ILogger<ServiceProduct> logger)
         {
             _mapper = mapper;
             _logger = logger;

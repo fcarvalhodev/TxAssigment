@@ -18,15 +18,3 @@ namespace TxAssignmentInfra.Connectors
         public static ConnectionMultiplexer Connection => lazyConnection.Value;
     }
 }
-
-
-//MOVE TO DI IN THE FUTURE
-//public void ConfigureServices(IServiceCollection services)
-//{
-//    services.AddSingleton<IDatabase>(provider =>
-//    {
-//        return RedisConnectorHelper.Connection.GetDatabase();
-//    });
-
-//    services.AddScoped<IRepositoryProduct, RepositoryProduct>();
-//}

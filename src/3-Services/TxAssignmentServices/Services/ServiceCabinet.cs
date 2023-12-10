@@ -14,7 +14,7 @@ namespace TxAssignmentServices.Services
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public ServiceCabinet(IRepositoryCabinet repositoryCabinet, IRepositoryProduct repositoryProduct, IMapper mapper, ILogger logger)
+        public ServiceCabinet(IRepositoryCabinet repositoryCabinet, IRepositoryProduct repositoryProduct, IMapper mapper, ILogger<ServiceCabinet> logger)
         {
             _mapper = mapper;
             _repositoryCabinet = repositoryCabinet;
