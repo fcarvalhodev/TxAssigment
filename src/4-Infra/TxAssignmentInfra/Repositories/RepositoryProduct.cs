@@ -16,11 +16,11 @@ namespace TxAssignmentInfra.Repositories
             _database = database;
         }
 
-        public async Task<RepositoryResponse<Product>> GetProductById(Guid IdProduct)
+        public async Task<RepositoryResponse<Product>> GetProductByJanCode(string JanCode)
         {
             try
             {
-                string key = $"{RedisDocTypes.SKU}{IdProduct}";
+                string key = $"{RedisDocTypes.SKU}{JanCode}";
                 var serializedProduct = await _database.StringGetAsync(key);
 
                 if (serializedProduct.IsNullOrEmpty)
@@ -42,7 +42,10 @@ namespace TxAssignmentInfra.Repositories
         {
             try
             {
-                string key = $"{RedisDocTypes.SKU}{product.Id}";
+                if (string.IsNullOrEmpty(product.JanCode))
+                    return new RepositoryResponse { Success = false, Message = "The product JanCode is mandatory" };
+
+                string key = $"{RedisDocTypes.SKU}{product.JanCode}";
 
                 var products = await GetAllProducts();
                 if (!products.Success)
@@ -62,11 +65,11 @@ namespace TxAssignmentInfra.Repositories
             }
         }
 
-        public async Task<RepositoryResponse> UpdateProduct(Guid IdProduct, Product product)
+        public async Task<RepositoryResponse> UpdateProduct(string janCode, Product product)
         {
             try
             {
-                var key = $"{RedisDocTypes.SKU}{IdProduct}";
+                var key = $"{RedisDocTypes.SKU}{janCode}";
                 if (!await _database.KeyExistsAsync(key))
                 {
                     return new RepositoryResponse { Success = false, Message = "Product not found." };
@@ -86,11 +89,11 @@ namespace TxAssignmentInfra.Repositories
             }
         }
 
-        public async Task<RepositoryResponse> DeleteProduct(Guid IdProduct)
+        public async Task<RepositoryResponse> DeleteProduct(string janCode)
         {
             try
             {
-                var key = $"{RedisDocTypes.SKU}{IdProduct}";
+                var key = $"{RedisDocTypes.SKU}{janCode}";
                 bool deleted = await _database.KeyDeleteAsync(key);
                 await _database.SetRemoveAsync("productKeys", key);
                 return new RepositoryResponse

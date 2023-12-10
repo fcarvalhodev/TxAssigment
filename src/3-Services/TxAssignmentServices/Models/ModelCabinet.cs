@@ -1,7 +1,8 @@
 ﻿namespace TxAssignmentServices.Models
 {
-    public class ModelCabinet : ModelBase
+    public class ModelCabinet
     {
+        public Guid Id { get; set; }
         public int Number { get; set; }
         public List<ModelRow> Rows { get; set; }
         public ModelPosition Position { get; set; }
@@ -12,6 +13,7 @@
             Rows = new List<ModelRow>();
             Position = new ModelPosition();
             Size = new ModelSize();
+            Id = Guid.NewGuid();
         }
     }
 }

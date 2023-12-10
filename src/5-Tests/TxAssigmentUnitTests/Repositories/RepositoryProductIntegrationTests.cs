@@ -34,7 +34,7 @@ namespace TxAssigmentUnitTests.Repositories
             // Act
             var createResponse = await _repository.CreateProduct(product);
 
-            var retrieveResponse = await _repository.GetProductById(product.Id);
+            var retrieveResponse = await _repository.GetProductByJanCode(product.JanCode);
 
             // Assert
             Assert.IsTrue(createResponse.Success);
@@ -42,7 +42,7 @@ namespace TxAssigmentUnitTests.Repositories
             Assert.AreEqual(product.JanCode, retrieveResponse.Data.JanCode); ;
 
             // Cleanup
-            await _repository.DeleteProduct(product.Id);
+            await _repository.DeleteProduct(product.JanCode);
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@ namespace TxAssigmentUnitTests.Repositories
             Assert.AreEqual($"The product with JanCode {duplicateProduct.JanCode} already exists in the database.", createResponse.Message);
 
             // Cleanup
-            await _repository.DeleteProduct(existingProduct.Id);
+            await _repository.DeleteProduct(existingProduct.JanCode);
         }
     }
 }

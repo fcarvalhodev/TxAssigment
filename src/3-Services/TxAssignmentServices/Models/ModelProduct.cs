@@ -2,7 +2,7 @@
 
 namespace TxAssignmentServices.Models
 {
-    public class ModelProduct : ModelBase
+    public class ModelProduct
     {
         public string? JanCode { get; set; }
         public string? Name { get; set; }
@@ -16,7 +16,13 @@ namespace TxAssignmentServices.Models
 
         public ModelProduct()
         {
-            Shape = EnumProductShape.Unknown; // Initialize with default Unknown value
+            
+        }
+
+        public ModelProduct(string janCode)
+        {
+            this.JanCode = janCode;
+            Shape = EnumProductShape.Unknown;
         }
     }
 }

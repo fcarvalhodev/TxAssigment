@@ -1,6 +1,6 @@
 ﻿namespace TxAssignmentInfra.Entities
 {
-    public class Lane : BaseEntity
+    public class Lane 
     {
         public int Number { get; set; }
         public string JanCode { get; set; }

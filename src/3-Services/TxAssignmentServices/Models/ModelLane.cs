@@ -1,6 +1,6 @@
 ﻿namespace TxAssignmentServices.Models
 {
-    public class ModelLane : ModelBase
+    public class ModelLane
     {
         public int Number { get; set; }
         public string JanCode { get; set; }

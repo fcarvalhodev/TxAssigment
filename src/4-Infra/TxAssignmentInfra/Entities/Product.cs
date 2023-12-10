@@ -3,7 +3,7 @@
 namespace TxAssignmentInfra.Entities
 {
     //Equivalent to SKU
-    public class Product : BaseEntity
+    public class Product
     {
         public string? JanCode { get; set; }
         public string? Name { get; set; }

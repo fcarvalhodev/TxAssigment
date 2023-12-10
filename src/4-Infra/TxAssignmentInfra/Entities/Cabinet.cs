@@ -1,7 +1,8 @@
 ﻿ namespace TxAssignmentInfra.Entities
 {
-    public class Cabinet : BaseEntity
+    public class Cabinet 
     {
+        public Guid Id { get; set; }
         public int Number { get; set; }
         public List<Row> Rows { get; set; }
         public Position Position { get; set; }
@@ -12,6 +13,7 @@
             Rows = new List<Row>();
             Position = new Position();
             Size = new Size();
+            Id = Guid.NewGuid();
         }
     }
 }

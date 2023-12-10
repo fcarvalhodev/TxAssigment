@@ -56,12 +56,12 @@ namespace TxAssigmentUnitTests.Repositories
                          .ReturnsAsync(serializedProduct);
 
             // Act
-            var response = await _repository.GetProductById(_testProduct.Id);
+            var response = await _repository.GetProductByJanCode(_testProduct.JanCode);
 
             // Assert
             Assert.IsTrue(response.Success);
             Assert.IsNotNull(response.Data);
-            Assert.AreEqual(_testProduct.Id, response.Data.Id);
+            Assert.AreEqual(_testProduct.JanCode, response.Data.JanCode);
         }
 
         [TestMethod]
@@ -72,7 +72,7 @@ namespace TxAssigmentUnitTests.Repositories
                          .ReturnsAsync(RedisValue.Null);
 
             // Act
-            var response = await _repository.GetProductById(Guid.NewGuid());
+            var response = await _repository.GetProductByJanCode(_testProduct.JanCode);
 
             // Assert
             Assert.IsFalse(response.Success);
@@ -88,7 +88,7 @@ namespace TxAssigmentUnitTests.Repositories
                          .ReturnsAsync(true);
 
             // Act
-            var response = await _repository.DeleteProduct(_testProduct.Id);
+            var response = await _repository.DeleteProduct(_testProduct.JanCode);
 
             // Assert
             Assert.IsTrue(response.Success);
@@ -103,7 +103,7 @@ namespace TxAssigmentUnitTests.Repositories
                          .ReturnsAsync(false);
 
             // Act
-            var response = await _repository.DeleteProduct(Guid.NewGuid());
+            var response = await _repository.DeleteProduct("");
 
             // Assert
             Assert.IsFalse(response.Success);
