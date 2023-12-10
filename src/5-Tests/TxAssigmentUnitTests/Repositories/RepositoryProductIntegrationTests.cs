@@ -50,7 +50,7 @@ namespace TxAssigmentUnitTests.Repositories
         {
             // Arrange
             var existingProduct = new MockBuilderProduct()
-                                .WithJanCode("1238172783910921")
+                                .WithJanCode("4902102113058")
                                 .WithDimensions(0.097, 0.308, 0.097)
                                 .WithSize(1500)
                                 .WithImageUrl("https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg")
@@ -62,7 +62,7 @@ namespace TxAssigmentUnitTests.Repositories
 
             // Create a new product with the same JanCode to test for duplication
             var duplicateProduct = new MockBuilderProduct()
-                                .WithJanCode("1238172783910921") // Same JanCode as existingProduct
+                                .WithJanCode("4902102113058") // Same JanCode as existingProduct
                                 .WithDimensions(0.097, 0.308, 0.097)
                                 .WithSize(1500)
                                 .WithImageUrl("https://operationmanagerstorage.blob.core.windows.net/skus/4902102141109_1666091236.jpg")

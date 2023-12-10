@@ -14,4 +14,8 @@
     <ProjectReference Include="..\..\4-Infra\TxAssignmentInfra\TxAssignmentInfra.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Strategies\Products\" />
+  </ItemGroup>
+
 </Project>

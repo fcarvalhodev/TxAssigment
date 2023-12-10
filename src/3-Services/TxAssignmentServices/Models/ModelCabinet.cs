@@ -1,7 +1,12 @@
-﻿namespace TxAssignmentServices.Models
+﻿using Newtonsoft.Json;
+
+namespace TxAssignmentServices.Models
 {
     public class ModelCabinet
     {
+        [JsonIgnore]
+        public Guid Id { get; set; }
+
         public int Number { get; set; }
         public List<ModelRow> Rows { get; set; }
         public ModelPosition Position { get; set; }

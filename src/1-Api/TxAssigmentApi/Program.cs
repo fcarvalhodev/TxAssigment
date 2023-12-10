@@ -34,6 +34,7 @@ namespace TxAssigmentApi
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddLogging();
 
             var app = builder.Build();
 

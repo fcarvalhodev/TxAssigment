@@ -1,60 +1,42 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using System.Numerics;
-using TxAssignmentInfra.Entities;
 using TxAssignmentInfra.Repositories;
 using TxAssignmentServices.Models;
+using TxAssignmentServices.Strategies.Cabinets;
 
 namespace TxAssignmentServices.Services
 {
     public class ServiceCabinet : IServiceCabinet
     {
         private readonly IRepositoryCabinet _repositoryCabinet;
-        private readonly IRepositoryProduct _repositoryProduct;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public ServiceCabinet(IRepositoryCabinet repositoryCabinet, IRepositoryProduct repositoryProduct, IMapper mapper, ILogger<ServiceCabinet> logger)
+        private readonly IStrategyCreateCabinetOperation _strategyCreateCabinetOperation;
+        private readonly IStrategyUpdateCabinetOperation _strategyUpdateCabinetOperation;
+        private readonly IStrategyDeleteCabinetOperation _strategyDeleteCabinetOperation;
+
+        public ServiceCabinet(IRepositoryCabinet repositoryCabinet, IMapper mapper, ILogger<ServiceCabinet> logger,
+            IStrategyCreateCabinetOperation strategyCreateCabinetOperation,
+            IStrategyUpdateCabinetOperation strategyUpdateCabinetOperation,
+            IStrategyDeleteCabinetOperation strategyDeleteCabinetOperation)
         {
             _mapper = mapper;
             _repositoryCabinet = repositoryCabinet;
             _logger = logger;
-            _repositoryProduct = repositoryProduct;
+
+            _strategyCreateCabinetOperation = strategyCreateCabinetOperation;
+            _strategyUpdateCabinetOperation = strategyUpdateCabinetOperation;
+            _strategyDeleteCabinetOperation = strategyDeleteCabinetOperation;
+
         }
 
         public async Task<ServiceResponse> CreateCabinet(ModelCabinet cabinet)
         {
             try
             {
-                if (cabinet == null)
-                {
-                    _logger.LogWarning("CreateCabinet called with null cabinet.");
-                    return new ServiceResponse { Success = false, Message = "Cabinet cannot be null" };
-                }
+                return await _strategyCreateCabinetOperation.ExecuteAsync(cabinet);
 
-                if (ValidateRowsForCabinet(cabinet.Rows, cabinet.Size.Height))
-                    return new ServiceResponse { Success = false, Message = "The total height of the rows is larger than the cabinet's height." };
-
-                //Validations
-                foreach (var row in cabinet.Rows)
-                {
-                    var validateLane = ValidateLaneWidth(row.Lanes, cabinet.Size.Width);
-                    if (!validateLane.isValid)
-                        return new ServiceResponse { Success = false, Message = validateLane.errorMessage };
-
-                    //Validate Products
-                    var validationResult = ValidateLaneProducts(row.Lanes);
-                    if (!validationResult.Success)
-                    {
-                        return validationResult;
-                    }
-                }
-
-                var result = await _repositoryCabinet.CreateCabinet(_mapper.Map<Cabinet>(cabinet));
-
-                if (result.Success)
-                    return new ServiceResponse { Success = true, Message = "Cabinet created successfully." };
-                else return new ServiceResponse { Success = false, Message = string.Empty };
             }
             catch (Exception ex)
             {
@@ -67,38 +49,12 @@ namespace TxAssignmentServices.Services
         {
             try
             {
-                var cabinetEntity = await _repositoryCabinet.GetCabinetById(IdCabinet);
+                return await _strategyUpdateCabinetOperation.ExecuteAsync(IdCabinet, newCabinet);
 
-                if (cabinetEntity == null)
-                    return new ServiceResponse { Success = false, Message = "Cabinet cannot be null" };
-
-
-                if (ValidateRowsForCabinet(newCabinet.Rows, newCabinet.Size.Height))
-                    return new ServiceResponse { Success = false, Message = "The total height of the rows is larger than the cabinet's height." };
-
-                //Validations
-                foreach (var row in newCabinet.Rows)
-                {
-                    var validateLane = ValidateLaneWidth(row.Lanes, newCabinet.Size.Width);
-                    if (!validateLane.isValid)
-                        return new ServiceResponse { Success = false, Message = validateLane.errorMessage };
-
-                    //Validate Products
-                    var validationResult = ValidateLaneProducts(row.Lanes);
-                    if (!validationResult.Success)
-                    {
-                        return validationResult;
-                    }
-                }
-
-                var result = await _repositoryCabinet.UpdateCabinet(IdCabinet, _mapper.Map<Cabinet>(newCabinet));
-                return result.Success ?
-                    new ServiceResponse { Success = true, Message = "Cabinet updated successfully." } :
-                    new ServiceResponse { Success = false, Message = result.Message };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while creating a cabinet.");
+                _logger.LogError(ex, "Error occurred while update a cabinet.");
                 return new ServiceResponse { Success = false, Message = ex.Message };
             }
         }
@@ -107,11 +63,7 @@ namespace TxAssignmentServices.Services
         {
             try
             {
-                var result = await _repositoryCabinet.DeleteCabinet(IdCabinet);
-
-                if (result.Success)
-                    return new ServiceResponse { Success = true, Message = "Cabinet deleted successfully." };
-                else return new ServiceResponse { Success = false, Message = string.Empty };
+                return await _strategyDeleteCabinetOperation.ExecuteAsync(IdCabinet);
             }
             catch (Exception ex)
             {
@@ -139,69 +91,6 @@ namespace TxAssignmentServices.Services
 
         }
 
-        #region .: Validations :.
-
-        private ServiceResponse ValidateLaneProducts(IEnumerable<ModelLane> lanes)
-        {
-            var productResponse = _repositoryProduct.GetAllProducts().Result;
-            if (!productResponse.Success)
-                return new ServiceResponse { Success = false, Message = $"Not able to fetch the produts" };
-
-            if(productResponse.Data.Count <= 0)
-                return new ServiceResponse { Success = false, Message = $"There are no products on the database, please insert a product to continue" };
-
-
-
-            foreach (var lane in lanes)
-            {
-                if (productResponse.Data.Where(me => me.JanCode.Equals(lane.JanCode)).Count() >= 1)
-                {
-                    return new ServiceResponse { Success = false, Message = $"The product with JanCode {lane.JanCode} was not found in the database, you must register the product first." };
-                }
-            }
-
-            return new ServiceResponse { Success = true };
-        }
-
-        private bool ValidateRowsForCabinet(List<ModelRow> rows, int cabinetHeight)
-        {
-            return rows.Sum(me => me.Size.Height) > cabinetHeight;
-        }
-
-        private (bool isValid, string errorMessage) ValidateLaneWidth(List<ModelLane> lanes, int cabinetWidth)
-        {
-            int totalLaneWidth = 0;
-            var orderedLanes = lanes.OrderBy(l => l.PositionX).ToList();
-
-            for (int i = 0; i < orderedLanes.Count; i++)
-            {
-                int laneWidth;
-                if (i == orderedLanes.Count - 1)
-                {
-                    laneWidth = cabinetWidth - orderedLanes[i].PositionX;
-                }
-                else
-                {
-                    laneWidth = orderedLanes[i + 1].PositionX - orderedLanes[i].PositionX;
-                }
-
-                if (laneWidth < 0)
-                {
-                    return (false, "Invalid lane configuration: Overlapping lanes.");
-                }
-
-                totalLaneWidth += laneWidth;
-            }
-
-            if (totalLaneWidth > cabinetWidth)
-            {
-                return (false, "The total width of the lanes is larger than the cabinet's width.");
-            }
-
-            return (true, string.Empty);
-        }
-        #endregion
-
         public async Task<ServiceResponse<List<ModelCabinet>>> GetAllCabinets()
         {
             try
@@ -225,7 +114,7 @@ namespace TxAssignmentServices.Services
                 _logger.LogError(ex, "Error occurred while retrieving all cabinets.");
                 return new ServiceResponse<List<ModelCabinet>> { Success = false, Message = ex.Message };
             }
- 
+
         }
     }
 }

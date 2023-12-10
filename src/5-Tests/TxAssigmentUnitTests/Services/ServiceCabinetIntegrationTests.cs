@@ -10,6 +10,7 @@ using TxAssignmentInfra.Repositories;
 using TxAssignmentServices.Models;
 using TxAssignmentServices.Profiles;
 using TxAssignmentServices.Services;
+using TxAssignmentServices.Strategies.Cabinets;
 
 namespace TxAssigmentUnitTests.Services
 {
@@ -40,7 +41,13 @@ namespace TxAssigmentUnitTests.Services
             });
             _mapper = mapperConfiguration.CreateMapper();
             _mockLogger = new Mock<ILogger<ServiceCabinet>>();
-            _serviceCabinet = new ServiceCabinet(_repositoryCabinet, _repositoryProduct, _mapper, _mockLogger.Object);
+
+            // Instantiate strategies
+            var createCabinetStrategy = new StrategyCreateCabinet(_repositoryCabinet, _repositoryProduct, _mapper, _mockLogger.Object);
+            var updateCabinetStrategy = new StrategyUpdateCabinetOperation(_repositoryCabinet, _repositoryProduct, _mapper, _mockLogger.Object);
+            var deleteCabinetStrategy = new StrategyDeleteCabinetOperation(_repositoryCabinet, _mockLogger.Object);
+
+            _serviceCabinet = new ServiceCabinet(_repositoryCabinet, _mapper, _mockLogger.Object, createCabinetStrategy, updateCabinetStrategy, deleteCabinetStrategy);
 
             _cabinet = new MockBuilderCabinet()
                                 .WithNumber(1)
@@ -79,8 +86,8 @@ namespace TxAssigmentUnitTests.Services
               .WithPosition(new Position { X = 20, Y = 40, Z = 10 })
               .WithSize(new Size { Width = 100, Depth = 50, Height = 160 })
               .BuildRow(1, 50, new Size { Height = 40 })
-              .BuildLane(1, 5, "4902102112570", 20)
-              .BuildLane(2, 10, "4902102112846", 13)
+              .BuildLane(1, 5, "4902102113102", 20)
+              .BuildLane(2, 10, "4902102112594", 13)
               .Build();
 
             // Act

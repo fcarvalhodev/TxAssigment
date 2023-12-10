@@ -1,5 +1,6 @@
 ﻿using TxAssignmentInfra.Repositories;
 using TxAssignmentServices.Services;
+using TxAssignmentServices.Strategies.Cabinets;
 
 namespace TxAssigmentApi.Middlewares
 {
@@ -9,6 +10,10 @@ namespace TxAssigmentApi.Middlewares
         {
             builder.Services.AddScoped<IServiceCabinet, ServiceCabinet>();
             builder.Services.AddScoped<IRepositoryCabinet, RepositoryCabinet>();
+
+            builder.Services.AddScoped<IStrategyCreateCabinetOperation, StrategyCreateCabinet>();
+            builder.Services.AddScoped<IStrategyUpdateCabinetOperation, StrategyUpdateCabinetOperation>();
+            builder.Services.AddScoped<IStrategyDeleteCabinetOperation, StrategyDeleteCabinetOperation>();
         }
     }
 }
