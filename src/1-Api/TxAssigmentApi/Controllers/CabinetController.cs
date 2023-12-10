@@ -3,11 +3,12 @@ using TxAssignmentServices.Models;
 using TxAssignmentServices.Services;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TxAssigmentApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CabinetController : ControllerBase
     {
         private readonly IServiceCabinet _serviceCabinet;
@@ -17,7 +18,7 @@ namespace TxAssigmentApi.Controllers
             _serviceCabinet = serviceCabinet;
         }
 
-        // POST: /Cabinet
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateCabinet([FromBody] ModelCabinet cabinet)
         {
@@ -28,7 +29,7 @@ namespace TxAssigmentApi.Controllers
                 return BadRequest(result.Message);
         }
 
-        // PUT: /Cabinet/{id}
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCabinet(Guid id, [FromBody] ModelCabinet cabinet)
         {
@@ -39,7 +40,7 @@ namespace TxAssigmentApi.Controllers
                 return BadRequest(result.Message);
         }
 
-        // DELETE: /Cabinet/{id}
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCabinet(Guid id)
         {
@@ -50,7 +51,6 @@ namespace TxAssigmentApi.Controllers
                 return BadRequest(result.Message);
         }
 
-        // GET: /Cabinet/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCabinetById(Guid id)
         {

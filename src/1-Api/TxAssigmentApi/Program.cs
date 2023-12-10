@@ -1,4 +1,7 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TxAssigmentApi.Middlewares;
 using TxAssignmentInfra.Connectors;
 using TxAssignmentServices.Profiles;
@@ -10,6 +13,7 @@ namespace TxAssigmentApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var configuration = builder.Configuration;
 
             // Register Redis Database
             builder.Services.AddSingleton(provider =>
@@ -21,6 +25,7 @@ namespace TxAssigmentApi
             builder.AddServiceProduct();
             builder.AddServiceCabinet();
             builder.AddServiceUser();
+            builder.AddServiceSwagger();
 
             // Add AutoMapper
             var mapperConfig = new MapperConfiguration(mc =>
@@ -38,6 +43,23 @@ namespace TxAssigmentApi
             builder.Services.AddSwaggerGen();
             builder.Services.AddLogging();
 
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                               .AddJwtBearer(options =>
+                               {
+                                   options.TokenValidationParameters = new TokenValidationParameters
+                                   {
+                                       ValidateIssuer = true,
+                                       ValidateAudience = true,
+                                       ValidateLifetime = true,
+                                       ValidateIssuerSigningKey = true,
+                                       ValidIssuer = configuration["Jwt:Issuer"],
+                                       ValidAudience = configuration["Jwt:Audience"],
+                                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                                   };
+                               });
+
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -47,8 +69,16 @@ namespace TxAssigmentApi
                 app.UseSwaggerUI();
             }
 
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
+                c.RoutePrefix = string.Empty;
+            });
+
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseAuthorization();
+
             app.MapControllers();
             app.Run();
         }

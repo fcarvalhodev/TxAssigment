@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TxAssignmentServices.Models;
 using TxAssignmentServices.Services;
 
@@ -26,6 +27,7 @@ namespace TxAssigmentApi.Controllers
                 return NotFound(response.Message);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] ModelProduct productModel)
         {
@@ -37,6 +39,7 @@ namespace TxAssigmentApi.Controllers
                 return BadRequest(response.Message);
         }
 
+        [Authorize]
         [HttpPut("{janCode}")]
         public async Task<IActionResult> UpdateProduct(string janCode, [FromBody] ModelProduct productModel)
         {
@@ -48,6 +51,7 @@ namespace TxAssigmentApi.Controllers
                 return BadRequest(response.Message);
         }
 
+        [Authorize]
         [HttpDelete("{janCode}")]
         public async Task<IActionResult> DeleteProduct(string janCode)
         {
