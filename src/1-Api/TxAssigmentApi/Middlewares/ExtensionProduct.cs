@@ -1,5 +1,6 @@
 ﻿using TxAssignmentInfra.Repositories;
 using TxAssignmentServices.Services;
+using TxAssignmentServices.Strategies.Products;
 
 namespace TxAssigmentApi.Middlewares
 {
@@ -9,6 +10,10 @@ namespace TxAssigmentApi.Middlewares
         {
             builder.Services.AddScoped<IServiceProduct, ServiceProduct>();
             builder.Services.AddScoped<IRepositoryProduct, RepositoryProduct>();
+
+            builder.Services.AddScoped<IStrategyCreateProductOperation, StrategyCreateProductOperation>();
+            builder.Services.AddScoped<IStrategyUpdateProductOperation, StrategyUpdateProductOperation>();
+            builder.Services.AddScoped<IStrategyDeleteProductOperation, StrategyDeleteProductOperation>();
         }
     }
 }

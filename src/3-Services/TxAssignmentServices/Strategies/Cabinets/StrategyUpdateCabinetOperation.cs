@@ -12,10 +12,10 @@ namespace TxAssignmentServices.Strategies.Cabinets
         private readonly IRepositoryCabinet _repositoryCabinet;
         private readonly IRepositoryProduct _repositoryProduct;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
+        private readonly ILogger<StrategyUpdateCabinetOperation> _logger;
 
 
-        public StrategyUpdateCabinetOperation(IRepositoryCabinet repositoryCabinet, IRepositoryProduct repositoryProduct, IMapper mapper, ILogger logger)
+        public StrategyUpdateCabinetOperation(IRepositoryCabinet repositoryCabinet, IRepositoryProduct repositoryProduct, IMapper mapper, ILogger<StrategyUpdateCabinetOperation> logger)
         {
             _repositoryCabinet = repositoryCabinet;
             _repositoryProduct = repositoryProduct;

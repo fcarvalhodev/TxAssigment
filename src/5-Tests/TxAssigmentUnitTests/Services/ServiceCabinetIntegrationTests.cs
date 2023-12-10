@@ -11,6 +11,7 @@ using TxAssignmentServices.Models;
 using TxAssignmentServices.Profiles;
 using TxAssignmentServices.Services;
 using TxAssignmentServices.Strategies.Cabinets;
+using TxAssignmentServices.Strategies.Products;
 
 namespace TxAssigmentUnitTests.Services
 {
@@ -42,10 +43,15 @@ namespace TxAssigmentUnitTests.Services
             _mapper = mapperConfiguration.CreateMapper();
             _mockLogger = new Mock<ILogger<ServiceCabinet>>();
 
+            // Mock loggers for each strategy
+            var mockLoggerCreate = new Mock<ILogger<StrategyCreateCabinetOperation>>();
+            var mockLoggerUpdate = new Mock<ILogger<StrategyUpdateCabinetOperation>>();
+            var mockLoggerDelete = new Mock<ILogger<StrategyDeleteCabinetOperation>>();
+
             // Instantiate strategies
-            var createCabinetStrategy = new StrategyCreateCabinet(_repositoryCabinet, _repositoryProduct, _mapper, _mockLogger.Object);
-            var updateCabinetStrategy = new StrategyUpdateCabinetOperation(_repositoryCabinet, _repositoryProduct, _mapper, _mockLogger.Object);
-            var deleteCabinetStrategy = new StrategyDeleteCabinetOperation(_repositoryCabinet, _mockLogger.Object);
+            var createCabinetStrategy = new StrategyCreateCabinetOperation(_repositoryCabinet, _repositoryProduct, _mapper, mockLoggerCreate.Object);
+            var updateCabinetStrategy = new StrategyUpdateCabinetOperation(_repositoryCabinet, _repositoryProduct, _mapper, mockLoggerUpdate.Object);
+            var deleteCabinetStrategy = new StrategyDeleteCabinetOperation(_repositoryCabinet, mockLoggerDelete.Object);
 
             _serviceCabinet = new ServiceCabinet(_repositoryCabinet, _mapper, _mockLogger.Object, createCabinetStrategy, updateCabinetStrategy, deleteCabinetStrategy);
 

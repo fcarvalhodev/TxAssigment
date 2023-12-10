@@ -4,7 +4,6 @@ using TxAssignmentInfra.Entities;
 using TxAssignmentInfra.Repositories;
 using TxAssignmentServices.Models;
 using TxAssignmentServices.Services;
-using TxAssignmentServices.Strategies.Cabinets;
 
 namespace TxAssignmentServices.Strategies.Products
 {
@@ -12,9 +11,9 @@ namespace TxAssignmentServices.Strategies.Products
     {
         private readonly IRepositoryProduct _repositoryProduct;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
+        private readonly ILogger<StrategyCreateProductOperation> _logger;
 
-        public StrategyCreateProductOperation(IRepositoryProduct repositoryProduct, IMapper mapper, ILogger logger)
+        public StrategyCreateProductOperation(IRepositoryProduct repositoryProduct, IMapper mapper, ILogger<StrategyCreateProductOperation> logger)
         {
             _repositoryProduct = repositoryProduct;
             _mapper = mapper;

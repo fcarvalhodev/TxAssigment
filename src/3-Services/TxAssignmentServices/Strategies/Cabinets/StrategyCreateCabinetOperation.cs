@@ -7,14 +7,14 @@ using TxAssignmentServices.Services;
 
 namespace TxAssignmentServices.Strategies.Cabinets
 {
-    public class StrategyCreateCabinet : IStrategyCreateCabinetOperation
+    public class StrategyCreateCabinetOperation : IStrategyCreateCabinetOperation
     {
         private readonly IRepositoryCabinet _repositoryCabinet;
         private readonly IRepositoryProduct _repositoryProduct;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
+        private readonly ILogger<StrategyCreateCabinetOperation> _logger;
 
-        public StrategyCreateCabinet(IRepositoryCabinet repositoryCabinet, IRepositoryProduct repositoryProduct, IMapper mapper, ILogger logger)
+        public StrategyCreateCabinetOperation(IRepositoryCabinet repositoryCabinet, IRepositoryProduct repositoryProduct, IMapper mapper, ILogger<StrategyCreateCabinetOperation> logger)
         {
             _repositoryCabinet = repositoryCabinet;
             _repositoryProduct = repositoryProduct;

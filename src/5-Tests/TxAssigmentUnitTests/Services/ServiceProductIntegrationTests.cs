@@ -10,6 +10,7 @@ using TxAssignmentServices.Profiles;
 using TxAssignmentServices.Services;
 using TxAssignmentInfra.Entities;
 using TxAssignmentServices.Strategies.Products;
+using TxAssignmentServices.Strategies.Cabinets;
 
 namespace TxAssigmentUnitTests.Services
 {
@@ -36,10 +37,15 @@ namespace TxAssigmentUnitTests.Services
             _mapper = mapperConfiguration.CreateMapper();
             _mockLogger = new Mock<ILogger<ServiceProduct>>();
 
+            // Mock loggers for each strategy
+            var mockLoggerCreate = new Mock<ILogger<StrategyCreateProductOperation>>();
+            var mockLoggerUpdate = new Mock<ILogger<StrategyUpdateProductOperation>>();
+            var mockLoggerDelete = new Mock<ILogger<StrategyDeleteProductOperation>>();
+
             // Instantiate strategies
-            var createProductStrategy = new StrategyCreateProductOperation(_repositoryProduct, _mapper, _mockLogger.Object);
-            var updateProductStrategy = new StrategyUpdateProductOperation(_repositoryProduct, _mapper, _mockLogger.Object);
-            var deleteProductStrategy = new StrategyDeleteProductOperation(_repositoryProduct, _mockLogger.Object);
+            var createProductStrategy = new StrategyCreateProductOperation(_repositoryProduct, _mapper, mockLoggerCreate.Object);
+            var updateProductStrategy = new StrategyUpdateProductOperation(_repositoryProduct, _mapper, mockLoggerUpdate.Object);
+            var deleteProductStrategy = new StrategyDeleteProductOperation(_repositoryProduct, mockLoggerDelete.Object);
 
             _serviceProduct = new ServiceProduct(_repositoryProduct, _mapper, _mockLogger.Object, createProductStrategy, updateProductStrategy, deleteProductStrategy);
 

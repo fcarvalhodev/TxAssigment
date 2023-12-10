@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using TxAssignmentInfra.Repositories;
 using TxAssignmentServices.Services;
 
@@ -8,9 +7,9 @@ namespace TxAssignmentServices.Strategies.Products
     public class StrategyDeleteProductOperation : IStrategyDeleteProductOperation
     {
         private readonly IRepositoryProduct _repositoryProduct;
-        private readonly ILogger _logger;
+        private readonly ILogger<StrategyDeleteProductOperation> _logger;
 
-        public StrategyDeleteProductOperation(IRepositoryProduct repositoryProduct, ILogger logger)
+        public StrategyDeleteProductOperation(IRepositoryProduct repositoryProduct, ILogger<StrategyDeleteProductOperation> logger)
         {
             _repositoryProduct = repositoryProduct;
             _logger = logger;

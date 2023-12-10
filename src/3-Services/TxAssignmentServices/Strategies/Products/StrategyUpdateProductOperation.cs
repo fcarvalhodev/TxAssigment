@@ -11,9 +11,9 @@ namespace TxAssignmentServices.Strategies.Products
     {
         private readonly IRepositoryProduct _repositoryProduct;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
+        private readonly ILogger<StrategyUpdateProductOperation> _logger;
 
-        public StrategyUpdateProductOperation(IRepositoryProduct repositoryProduct, IMapper mapper, ILogger logger)
+        public StrategyUpdateProductOperation(IRepositoryProduct repositoryProduct, IMapper mapper, ILogger<StrategyUpdateProductOperation> logger)
         {
             _repositoryProduct = repositoryProduct;
             _mapper = mapper;

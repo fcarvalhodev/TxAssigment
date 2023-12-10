@@ -7,9 +7,9 @@ namespace TxAssignmentServices.Strategies.Cabinets
     public class StrategyDeleteCabinetOperation : IStrategyDeleteCabinetOperation
     {
         private readonly IRepositoryCabinet _repositoryCabinet;
-        private readonly ILogger _logger;
+        private readonly ILogger<StrategyDeleteCabinetOperation> _logger;
 
-        public StrategyDeleteCabinetOperation(IRepositoryCabinet repositoryCabinet, ILogger logger)
+        public StrategyDeleteCabinetOperation(IRepositoryCabinet repositoryCabinet, ILogger<StrategyDeleteCabinetOperation> logger)
         {
             _repositoryCabinet = repositoryCabinet;
             _logger = logger;
