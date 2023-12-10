@@ -8,6 +8,5 @@ namespace TxAssignmentServices.Services
         Task<ServiceResponse> UpdateCabinet(Guid IdCabinet, ModelCabinet newCabinet);
         Task<ServiceResponse> DeleteCabinet(Guid IdCabinet);
         Task<ServiceResponse<ModelCabinet>> GetCabinetById(Guid IdCabinet);
-        //Task<ServiceResponse<ModelCabinet>> IncludeProductIntoCabinet(Guid cabinetId, ModelProduct newProduct);
     }
 }

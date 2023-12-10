@@ -197,13 +197,6 @@ namespace TxAssignmentServices.Services
 
             return (true, string.Empty);
         }
-
-
-        private bool ValidateLaneWidth(int totalLaneWidth, int cabinetWidth)
-        {
-            return totalLaneWidth > cabinetWidth;
-        }
-
         #endregion
     }
 }
