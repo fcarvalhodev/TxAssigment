@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package cabinet;
+
+message ModelPosition {
+  int32 x = 1;
+  int32 y = 2;
+  int32 z = 3;
+}
+
+message ModelSize {
+  int32 width = 1;
+  int32 height = 2;
+  int32 depth = 3;
+}
+
+message ModelLane {
+  int32 number = 1;
+  string janCode = 2;
+  int32 positionX = 3;
+  int32 quantity = 4;
+}
+
+message ModelRow {
+  int32 number = 1;
+  repeated ModelLane lanes = 2;
+  int32 positionZ = 3;
+  ModelSize size = 4;
+}
+
+message ModelCabinet {
+  string id = 1; // GUIDs are represented as strings in protobuf
+  int32 number = 2;
+  repeated ModelRow rows = 3;
+  ModelPosition position = 4;
+  ModelSize size = 5;
+}
+
+service CabinetServiceImp {
+  rpc CreateCabinet(ModelCabinet) returns (ServiceResponse);
+  rpc DeleteCabinet(CabinetIdRequest) returns (ServiceResponse);
+  rpc GetCabinetById(CabinetIdRequest) returns (ServiceResponse);
+  rpc UpdateCabinet(UpdateCabinetRequest) returns (ServiceResponse);
+  rpc GetAllCabinets(EmptyRequest) returns (ServiceResponse);
+}
+
+//Request methods
+message CabinetIdRequest {
+  string id = 1;
+}
+
+message UpdateCabinetRequest {
+  string id = 1;
+  ModelCabinet cabinet = 2;
+}
+
+message EmptyRequest {}
+
+//Response
+message ServiceResponse {
+  bool success = 1;
+  string message = 2;
+  google.protobuf.Any data = 3;
+}
+
+import "google/protobuf/any.proto";

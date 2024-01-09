@@ -28,7 +28,6 @@ namespace TxAssignmentServices.Services
             _strategyCreateCabinetOperation = strategyCreateCabinetOperation;
             _strategyUpdateCabinetOperation = strategyUpdateCabinetOperation;
             _strategyDeleteCabinetOperation = strategyDeleteCabinetOperation;
-
         }
 
         public async Task<ServiceResponse> CreateCabinet(ModelCabinet cabinet)
@@ -36,7 +35,6 @@ namespace TxAssignmentServices.Services
             try
             {
                 return await _strategyCreateCabinetOperation.ExecuteAsync(cabinet);
-
             }
             catch (Exception ex)
             {
@@ -50,7 +48,6 @@ namespace TxAssignmentServices.Services
             try
             {
                 return await _strategyUpdateCabinetOperation.ExecuteAsync(IdCabinet, newCabinet);
-
             }
             catch (Exception ex)
             {
@@ -79,7 +76,11 @@ namespace TxAssignmentServices.Services
                 var result = await _repositoryCabinet.GetCabinetById(IdCabinet);
 
                 if (result.Success)
-                    return new ServiceResponse<ModelCabinet> { Success = true, Data = _mapper.Map<ModelCabinet>(result.Data), Message = "Cabinet retrieved successfully." };
+                    return new ServiceResponse<ModelCabinet>
+                    {
+                        Success = true, Data = _mapper.Map<ModelCabinet>(result.Data),
+                        Message = "Cabinet retrieved successfully."
+                    };
                 else
                     return new ServiceResponse<ModelCabinet> { Success = false, Message = "Cabinet not found." };
             }
@@ -88,7 +89,6 @@ namespace TxAssignmentServices.Services
                 _logger.LogError(ex, "Error occurred trying to get the cabinet.");
                 return new ServiceResponse<ModelCabinet> { Success = false, Message = ex.Message };
             }
-
         }
 
         public async Task<ServiceResponse<List<ModelCabinet>>> GetAllCabinets()
@@ -114,8 +114,6 @@ namespace TxAssignmentServices.Services
                 _logger.LogError(ex, "Error occurred while retrieving all cabinets.");
                 return new ServiceResponse<List<ModelCabinet>> { Success = false, Message = ex.Message };
             }
-
         }
     }
 }
-
