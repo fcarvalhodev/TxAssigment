@@ -11,16 +11,13 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+      <Content Remove="Pages\Cabinets.razor" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Google.Protobuf" Version="3.25.1" />
       <PackageReference Include="Grpc.Net.Client" Version="2.40.0" />
       <PackageReference Include="Grpc.Net.Client.Web" Version="2.40.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\src\2-Client\TxAssignmentGRPC\TxAssignmentGRPC.csproj" />
     </ItemGroup>
 
 </Project>
