@@ -3,6 +3,12 @@ using TxAssignmentGRPC.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddGrpc();
 
+builder.WebHost.ConfigureKestrel(options => 
+{
+    options.ListenAnyIP(80);
+    options.ListenAnyIP(443);
+});
+
 var app = builder.Build();
 app.MapGrpcService<CabinetService>();
 
